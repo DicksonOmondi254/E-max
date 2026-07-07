@@ -1,67 +1,60 @@
 import "./Navbar.css";
+
 import { Link } from "react-router-dom";
-import SearchBar from "../SearchBar/SearchBar";
-import { FaShoppingCart, FaHeart, FaUser } from "react-icons/fa";
-import Button from "../common/Button/Button";
 
-export default function Navbar() {
+import Logo from "../Logo/Logo";
+import SearchBar from "./SearchBar";
+import CartIcon from "../Cart/CartIcon";
+import WishlistIcon from "../Wishlist/WishlistIcon";
+import NotificationBell from "../Notifications/NotificationBell";
+import UserMenu from "./UserMenu";
+
+const Navbar = () => {
   return (
-    <nav className="navbar">
-      {/* Logo */}
-      <div className="logo">
-        <Link to="/" className="logo-link">
-          E-Max
-        </Link>
-      </div>
+    <header className="navbar">
 
-      {/* Search */}
+      <Logo />
+
       <SearchBar />
 
-      {/* Navigation */}
-      <ul className="nav-links">
-        <li>
-          <Link to="/">Home</Link>
-        </li>
+      <nav>
 
-        <li>
-          <Link to="/products">Products</Link>
-        </li>
+        <ul className="nav-links">
 
-        <li>
-          <Link to="/categories">Categories</Link>
-        </li>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
 
-        <li>
-          <Link to="/deals">Deals</Link>
-        </li>
+          <li>
+            <Link to="/products">Products</Link>
+          </li>
 
-        <li>
-          <Link to="/about">About</Link>
-        </li>
+          <li>
+            <Link to="/deals">Deals</Link>
+          </li>
 
-        <li>
-          <Link to="/contact">Contact</Link>
-        </li>
-      </ul>
+          <li>
+            <Link to="/brands">Brands</Link>
+          </li>
 
-      {/* Right Side */}
-      <div className="actions">
-        <Link to="/wishlist">
-          <FaHeart />
-        </Link>
+        </ul>
 
-        <Link to="/cart">
-          <FaShoppingCart />
-        </Link>
+      </nav>
 
-        <Link to="/profile">
-          <FaUser />
-        </Link>
+      <div className="nav-right">
 
-        <Link to="/login">
-          <Button>Login</Button>
-        </Link>
+        <WishlistIcon />
+
+        <CartIcon />
+
+        <NotificationBell />
+
+        <UserMenu />
+
       </div>
-    </nav>
+
+    </header>
   );
-}
+};
+
+export default Navbar;
