@@ -1,0 +1,40 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global */
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f7fb;
+  color: #333;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+ul {
+  list-style: none;
+}

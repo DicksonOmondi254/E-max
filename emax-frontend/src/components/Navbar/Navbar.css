@@ -1,0 +1,43 @@
+.logo-link {
+  text-decoration: none;
+  color: #0057ff;
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-links li {
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: #0057ff;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.actions a {
+  color: #333;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.actions a:hover {
+  color: #0057ff;
+}

@@ -1,0 +1,23 @@
+.search{
+
+display:flex;
+
+align-items:center;
+
+background:white;
+
+padding:5px 15px;
+
+border-radius:10px;
+
+width:450px;
+
+}
+
+.icon{
+
+font-size:18px;
+
+color:#888;
+
+}

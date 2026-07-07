@@ -1,0 +1,16 @@
+import { Outlet } from "react-router-dom";
+
+import Navbar from "../components/Navbar/Navbar";
+import Footer from "../components/Footer/Footer";
+
+export default function MainLayout() {
+    return (
+        <>
+            <Navbar />
+            <main className="min-h-screen bg-slate-100">
+                <Outlet />
+            </main>
+            <Footer />
+        </>
+    );
+}
