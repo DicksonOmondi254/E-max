@@ -86,3 +86,22 @@
 
   cursor: pointer;
 }
+.view-cart-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:15px;
+
+    background:white;
+
+    color:#2563eb;
+
+    border:2px solid #2563eb;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}

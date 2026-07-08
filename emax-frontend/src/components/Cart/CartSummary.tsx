@@ -1,4 +1,5 @@
 import { useAppSelector } from "../../redux/hooks";
+import { Link } from "react-router-dom";
 
 const CartSummary = () => {
   const items = useAppSelector(
@@ -40,9 +41,15 @@ const CartSummary = () => {
         KES {total.toLocaleString()}
       </h3>
 
-      <button className="checkout-btn">
-        Proceed to Checkout
-      </button>
+      <Link to="/cart">
+  <button className="view-cart-btn">
+    View Full Cart
+  </button>
+</Link>
+
+<button className="checkout-btn">
+  Proceed to Checkout
+</button>
 
     </div>
   );
