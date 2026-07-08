@@ -1,14 +1,46 @@
-import axios from "axios";
 
-const API = axios.create({
-  baseURL: "http://localhost:8000/api",
+const API="http://localhost:5000/api/auth";
+
+export const authService={
+
+login:async(data:any)=>{
+
+const response=await fetch(`${API}/login`,{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify(data)
+
 });
 
-export const login = async (email: string, password: string) => {
-  const response = await API.post("/login", {
-    email,
-    password,
-  });
+return response.json();
 
-  return response.data;
-};
+},
+
+register:async(data:any)=>{
+
+const response=await fetch(`${API}/register`,{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify(data)
+
+});
+
+return response.json();
+
+}
+
+}

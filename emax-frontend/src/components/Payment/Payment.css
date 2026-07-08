@@ -1,0 +1,71 @@
+.payment-page{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:30px;
+    padding:40px;
+    background:#f5f7fb;
+}
+
+.payment-card,
+.payment-summary{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.05);
+}
+
+.payment-tabs{
+    display:flex;
+    gap:10px;
+    margin:20px 0;
+    flex-wrap:wrap;
+}
+
+.payment-tabs button{
+    padding:12px 18px;
+    border:none;
+    background:#eceff4;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.payment-tabs button:hover{
+    background:#0057ff;
+    color:white;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.card-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.pay-btn{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    background:#0057ff;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin:15px 0;
+}
+
+.total{
+    font-size:22px;
+    font-weight:bold;
+}
