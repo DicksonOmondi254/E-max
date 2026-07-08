@@ -1,59 +1,62 @@
 import "./Navbar.css";
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import Logo from "../Logo/Logo";
 import SearchBar from "./SearchBar";
 import CartIcon from "../Cart/CartIcon";
+import CartDrawer from "../Cart/CartDrawer";
 import WishlistIcon from "../Wishlist/WishlistIcon";
 import NotificationBell from "../Notifications/NotificationBell";
 import UserMenu from "./UserMenu";
 
 const Navbar = () => {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
   return (
-    <header className="navbar">
+    <>
+      <header className="navbar">
+        <Logo />
 
-      <Logo />
+        <SearchBar />
 
-      <SearchBar />
+        <nav>
+          <ul className="nav-links">
+            <li>
+              <Link to="/">Home</Link>
+            </li>
 
-      <nav>
+            <li>
+              <Link to="/products">Products</Link>
+            </li>
 
-        <ul className="nav-links">
+            <li>
+              <Link to="/deals">Deals</Link>
+            </li>
 
-          <li>
-            <Link to="/">Home</Link>
-          </li>
+            <li>
+              <Link to="/brands">Brands</Link>
+            </li>
+          </ul>
+        </nav>
 
-          <li>
-            <Link to="/products">Products</Link>
-          </li>
+        <div className="nav-right">
+          <WishlistIcon />
 
-          <li>
-            <Link to="/deals">Deals</Link>
-          </li>
+          <CartIcon onClick={() => setIsCartOpen(true)} />
 
-          <li>
-            <Link to="/brands">Brands</Link>
-          </li>
+          <NotificationBell />
 
-        </ul>
+          <UserMenu />
+        </div>
+      </header>
 
-      </nav>
-
-      <div className="nav-right">
-
-        <WishlistIcon />
-
-        <CartIcon />
-
-        <NotificationBell />
-
-        <UserMenu />
-
-      </div>
-
-    </header>
+      <CartDrawer
+        open={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+      />
+    </>
   );
 };
 

@@ -1,12 +1,35 @@
 import "./ProductCard.css";
 
+import { useAppDispatch } from "../../redux/hooks";
+import { addToCart } from "../../redux/cartSlice";
+
 interface ProductCardProps {
+  id: number;
   name: string;
   price: number;
   image: string;
 }
 
-const ProductCard = ({ name, price, image }: ProductCardProps) => {
+const ProductCard = ({
+  id,
+  name,
+  price,
+  image,
+}: ProductCardProps) => {
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        id,
+        name,
+        image,
+        price,
+        quantity: 1,
+      })
+    );
+  };
+
   return (
     <div className="product-card">
       <div className="product-image">
@@ -20,7 +43,10 @@ const ProductCard = ({ name, price, image }: ProductCardProps) => {
           KES {price.toLocaleString()}
         </p>
 
-        <button className="cart-btn">
+        <button
+          className="cart-btn"
+          onClick={handleAddToCart}
+        >
           Add to Cart
         </button>
       </div>

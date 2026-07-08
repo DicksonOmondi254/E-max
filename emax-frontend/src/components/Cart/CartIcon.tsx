@@ -1,12 +1,34 @@
-import { FaShoppingCart } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import "./CartIcon.css";
 
-const CartIcon = () => {
+import  { FaShoppingCart } from "react-icons/fa";
+
+import  { useAppSelector } from "../../redux/hooks";
+
+interface Props {
+  onClick: () => void;
+}
+
+const CartIcon = ({ onClick }: Props) => {
+  const items = useAppSelector((state) => state.cart.items);
+
+  const totalItems = items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
   return (
-    <Link className="nav-icon" to="/cart">
-      <FaShoppingCart />
-      <span className="badge">0</span>
-    </Link>
+    <div
+      className="cart-icon"
+      onClick={onClick}
+    >
+      <FaShoppingCart size={24} />
+
+      {totalItems > 0 && (
+        <span className="cart-badge">
+          {totalItems}
+        </span>
+      )}
+    </div>
   );
 };
 

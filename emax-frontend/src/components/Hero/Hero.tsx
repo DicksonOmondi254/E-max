@@ -1,50 +1,18 @@
 import "./Hero.css";
 
-export default function Hero() {
-    return (
-        <section className="hero">
+import CategorySidebar from "../CategorySidebar/CategorySidebar";
+import HeroSlider from "../HeroSlider/HeroSlider";
 
-            <div className="hero-left">
+const Hero = () => {
+  return (
+    <section className="hero-container">
+      {/* Left Sidebar */}
+      <CategorySidebar />
 
-                <h1>
-                    Genuine Electronics
-                    <br />
-                    Without the Hassle
-                </h1>
+      {/* Main Hero Banner */}
+      <HeroSlider />
+    </section>
+  );
+};
 
-                <p>
-
-                    Phones
-
-                    Laptops
-
-                    Smart Watches
-
-                    Accessories
-
-                    Gaming
-
-                    Networking
-
-                </p>
-
-                <button>
-
-                    Shop Now
-
-                </button>
-
-            </div>
-
-            <div className="hero-right">
-
-                <img
-                    src="/images/hero-banner.png"
-                    alt="E-Max"
-                />
-
-            </div>
-
-        </section>
-    );
-}
+export default Hero;

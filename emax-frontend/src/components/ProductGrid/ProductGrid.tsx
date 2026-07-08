@@ -13,7 +13,7 @@ products.map(product=>(
 
 <ProductCard
 
-key={product.id}
+id={product.id}
 
 name={product.name}
 

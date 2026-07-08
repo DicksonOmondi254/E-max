@@ -1,13 +1,19 @@
 import Hero from "../components/Hero/Hero";
-import Categories from "../components/Categories/Categories";
+import FlashSale from "../components/FlashSale/FlashSale";
 import FeaturedProducts from "../components/FeaturedProducts/FeaturedProducts";
+import BrandShowcase from "../components/BrandShowcase/BrandShowcase";
+import Newsletter from "../components/Newsletter/Newsletter";
 
-export default function Home() {
-    return (
-        <>
-            <Hero />
-            <Categories />
-            <FeaturedProducts />
-        </>
-    );
-}
+const Home = () => {
+  return (
+    <>
+      <Hero />
+      <FlashSale />
+      <FeaturedProducts />
+      <BrandShowcase />
+      <Newsletter />
+    </>
+  );
+};
+
+export default Home;

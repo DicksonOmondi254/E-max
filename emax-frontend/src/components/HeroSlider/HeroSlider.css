@@ -1,0 +1,93 @@
+.slider-container {
+  position: relative;
+  height: 450px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.slide {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 60px;
+  color: white;
+}
+
+.slide-content {
+  width: 50%;
+}
+
+.slide-content h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.slide-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.slide-content button {
+  padding: 15px 35px;
+  border: none;
+  background: #ff7300;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.slide-image {
+  width: 40%;
+}
+
+.slide-image img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.left-arrow,
+.right-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,.25);
+  color: white;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.left-arrow {
+  left: 20px;
+}
+
+.right-arrow {
+  right: 20px;
+}
+
+.dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  opacity: .4;
+  cursor: pointer;
+}
+
+.dots span.active {
+  opacity: 1;
+}
