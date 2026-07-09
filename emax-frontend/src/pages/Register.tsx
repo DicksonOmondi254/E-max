@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import RegisterForm from "../pages/Auth/RegisterForm";
+import RegisterForm from "../components/Auth/RegisterForm";
 
 import "../components/Auth/Auth.css";
 

@@ -1,61 +1,41 @@
 import { useState } from "react";
 
-const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm=()=>{
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const[email,setEmail]=useState("");
 
-    console.log({
-      email,
-      password,
-    });
+const[password,setPassword]=useState("");
 
-    // TODO: Call backend login API
-  };
+return(
 
-  return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md"
-    >
-      <h2 className="text-3xl font-bold mb-6 text-center text-blue-600">
-        Login to E-Max
-      </h2>
+<div className="auth-card">
 
-      <div className="mb-4">
-        <label>Email</label>
+<h2>Welcome Back</h2>
 
-        <input
-          className="w-full border p-3 rounded-lg mt-1"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-        />
-      </div>
+<input
+type="email"
+placeholder="Email Address"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
+/>
 
-      <div className="mb-6">
-        <label>Password</label>
+<input
+type="password"
+placeholder="Password"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
+/>
 
-        <input
-          className="w-full border p-3 rounded-lg mt-1"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-        />
-      </div>
+<button>
 
-      <button
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition"
-        type="submit"
-      >
-        Login
-      </button>
-    </form>
-  );
+Login
+
+</button>
+
+</div>
+
+);
+
 };
 
 export default LoginForm;

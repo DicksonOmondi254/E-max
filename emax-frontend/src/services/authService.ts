@@ -1,11 +1,10 @@
 
-const API="http://localhost:5000/api/auth";
-
+const API_URL = "http://localhost:5000/api";
 export const authService={
 
 login:async(data:any)=>{
 
-const response=await fetch(`${API}/login`,{
+const response=await fetch(`${API_URL}/login`,{
 
 method:"POST",
 
@@ -25,7 +24,7 @@ return response.json();
 
 register:async(data:any)=>{
 
-const response=await fetch(`${API}/register`,{
+const response=await fetch(`${API_URL}/login`, {
 
 method:"POST",
 

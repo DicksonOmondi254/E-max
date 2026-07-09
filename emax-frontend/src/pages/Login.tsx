@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import LoginForm from "../pages/Auth/LoginForm";
+import LoginForm from "../components/Auth/LoginForm";
 
 import "../components/Auth/Auth.css";
 
