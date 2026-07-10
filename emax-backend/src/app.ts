@@ -5,8 +5,13 @@ import helmet from "helmet";
 import compression from "compression";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import path from "path";
 
 import authRoutes from "./routes/authRoutes";
+import productRoutes from "./routes/productRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
+import brandRoutes from "./routes/brandRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 
 dotenv.config();
 
@@ -47,11 +52,21 @@ app.get("/", (_, res) => {
   });
 });
 
+app.use(
+  "/uploads",
+  express.static(
+    path.join(__dirname, "../uploads")
+  )
+);
 /* ===========================================
    API Routes
 =========================================== */
 
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/brands", brandRoutes);
+app.use("/api/upload", uploadRoutes);
 
 /*
 Future Routes

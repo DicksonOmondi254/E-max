@@ -9,6 +9,7 @@ import App from "./App";
 import { store } from "./redux/stores";
 
 import "./styles/global.css";
+import "./styles/admin.css";
 
 const queryClient = new QueryClient();
 

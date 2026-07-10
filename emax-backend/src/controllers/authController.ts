@@ -51,10 +51,11 @@ export const register = async (
       role: user.role,
     });
 
+    const { password: _, ...saferUser } = user;
     res.status(201).json({
       success: true,
       token,
-      user,
+      user: saferUser,
     });
   } catch (error) {
     console.error(error);
@@ -102,10 +103,11 @@ export const login = async (
       role: user.role,
     });
 
+    const { password: _, ...safeUser } = user;
     res.json({
       success: true,
       token,
-      user,
+      user: safeUser, 
     });
   } catch (error) {
     console.error(error);

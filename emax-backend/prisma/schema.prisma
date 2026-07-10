@@ -16,8 +16,96 @@ model User {
   password   String
   role       Role     @default(CUSTOMER)
   isVerified Boolean  @default(false)
+  
+  reviews ProductReview[]
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+
+  products    Product[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  logo        String?
+
+  products    Product[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id            Int       @id @default(autoincrement())
+
+  name          String
+  slug          String    @unique
+
+  description   String
+
+  price         Float
+
+  stock         Int       @default(0)
+
+  thumbnail     String
+
+  featured      Boolean   @default(false)
+
+  active        Boolean   @default(true)
+
+  categoryId    Int
+  category      Category  @relation(fields: [categoryId], references: [id])
+
+  brandId       Int
+  brand         Brand     @relation(fields: [brandId], references: [id])
+
+  images        ProductImage[]
+
+  reviews       ProductReview[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ProductImage {
+
+  id          Int @id @default(autoincrement())
+
+  image       String
+
+  productId   Int
+
+  product     Product @relation(fields:[productId], references:[id])
+
+}
+
+model ProductReview {
+
+  id          Int @id @default(autoincrement())
+
+  rating      Int
+
+  comment     String
+
+  productId   Int
+
+  userId      Int
+
+  product     Product @relation(fields:[productId], references:[id])
+
+  user        User @relation(fields:[userId], references:[id])
+
+  createdAt   DateTime @default(now())
+
 }
 
 enum Role {

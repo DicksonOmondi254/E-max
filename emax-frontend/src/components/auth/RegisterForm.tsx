@@ -68,7 +68,7 @@ const RegisterForm = () => {
     try {
       setLoading(true);
 
-      await authService.register({
+      const response = await authService.register({
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
@@ -76,13 +76,17 @@ const RegisterForm = () => {
         password: formData.password,
       });
 
-      alert("Registration successful!");
+      console.log("Register Success:", response);
 
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
+      if (response.success) {
+        alert("Registration successful!");
 
-      setError("Registration failed. Please try again.");
+        navigate("/login");
+      }
+    } catch (err: any) {
+      console.error("Registration Error:", err);
+
+      setError(err.message || "Registration failed.");
     } finally {
       setLoading(false);
     }
@@ -242,4 +246,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm; 
+export default RegisterForm;
