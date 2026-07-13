@@ -8,8 +8,9 @@ import {
   deleteProduct,
 } from "../controllers/productController";
 
-import { protect } from "../middleware/authMiddleware";
-import { authorize } from "../middleware/roleMiddleware";
+import { protect } from "../middlewares/authMiddleware";
+import { authorize } from "../middlewares/roleMiddleware";
+import { upload } from "../middlewares/uploadMiddleware";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.post(
   "/",
   protect,
   authorize("ADMIN", "SUPER_ADMIN"),
+  upload.single("image"),
   createProduct
 );
 
@@ -28,6 +30,7 @@ router.put(
   "/:id",
   protect,
   authorize("ADMIN", "SUPER_ADMIN"),
+  upload.single("image"),
   updateProduct
 );
 

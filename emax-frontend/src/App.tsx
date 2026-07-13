@@ -1,29 +1,61 @@
 import { Routes, Route } from "react-router-dom";
 
+// ===========================
 // Public Pages
+// ===========================
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProductsPage from "./pages/products";
+import ProductDetails from "./pages/ProductDetails";
 
+// ===========================
 // Customer Pages
+// ===========================
 import Dashboard from "./pages/Dashboard";
 import Checkout from "./pages/Checkout";
 import Payment from "./pages/Payment";
 
+// ===========================
 // Admin Layout
+// ===========================
 import AdminLayout from "./layouts/AdminLayout";
 
-// Admin Pages
+// ===========================
+// Admin Dashboard
+// ===========================
 import AdminDashboard from "./pages/admin/Dashboard";
+
+// ===========================
+// Admin Product Pages
+// ===========================
 import Products from "./pages/admin/Products";
 import CreateProduct from "./pages/admin/CreateProduct";
 import EditProduct from "./pages/admin/EditProduct";
+
+// ===========================
+// Admin Category Pages
+// ===========================
 import Categories from "./pages/admin/Categories";
+import CreateCategory from "./pages/admin/CreateCategory";
+import EditCategory from "./pages/admin/EditCategory";
+
+// ===========================
+// Admin Brand Pages
+// ===========================
 import Brands from "./pages/admin/Brands";
+import CreateBrand from "./pages/admin/CreateBrand";
+import EditBrand from "./pages/admin/EditBrand";
+
+// ===========================
+// Other Admin Pages
+// ===========================
 import Orders from "./pages/admin/Orders";
 import Customers from "./pages/admin/Customers";
 
+// ===========================
 // Protected Route
+// ===========================
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -38,6 +70,14 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/register" element={<Register />} />
+
+      {/* Customer Store */}
+      <Route path="/products" element={<ProductsPage />} />
+
+      <Route
+        path="/products/:id"
+        element={<ProductDetails />}
+      />
 
       {/* ===========================
           Customer Routes
@@ -75,30 +115,80 @@ function App() {
       =========================== */}
 
       <Route
-  path="/admin"
-  element={
-    <ProtectedRoute
-      roles={["ADMIN", "SUPER_ADMIN"]}
-    >
-      <AdminLayout />
-    </ProtectedRoute>
-  }
->
-        <Route index element={<AdminDashboard />} />
+        path="/admin"
+        element={
+          <ProtectedRoute
+            roles={["ADMIN", "SUPER_ADMIN"]}
+          >
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        {/* Dashboard */}
+        <Route
+          index
+          element={<AdminDashboard />}
+        />
 
-        <Route path="products" element={<Products />} />
+        {/* Products */}
+        <Route
+          path="products"
+          element={<Products />}
+        />
 
-        <Route path="products/new" element={<CreateProduct />} />
+        <Route
+          path="products/new"
+          element={<CreateProduct />}
+        />
 
-        <Route path="products/edit/:id" element={<EditProduct />} />
+        <Route
+          path="products/edit/:id"
+          element={<EditProduct />}
+        />
 
-        <Route path="categories" element={<Categories />} />
+        {/* Categories */}
+        <Route
+          path="categories"
+          element={<Categories />}
+        />
 
-        <Route path="brands" element={<Brands />} />
+        <Route
+          path="categories/new"
+          element={<CreateCategory />}
+        />
 
-        <Route path="orders" element={<Orders />} />
+        <Route
+          path="categories/edit/:id"
+          element={<EditCategory />}
+        />
 
-        <Route path="customers" element={<Customers />} />
+        {/* Brands */}
+        <Route
+          path="brands"
+          element={<Brands />}
+        />
+
+        <Route
+          path="brands/new"
+          element={<CreateBrand />}
+        />
+
+        <Route
+          path="brands/edit/:id"
+          element={<EditBrand />}
+        />
+
+        {/* Orders */}
+        <Route
+          path="orders"
+          element={<Orders />}
+        />
+
+        {/* Customers */}
+        <Route
+          path="customers"
+          element={<Customers />}
+        />
       </Route>
     </Routes>
   );

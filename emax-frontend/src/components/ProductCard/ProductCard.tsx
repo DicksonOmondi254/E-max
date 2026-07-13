@@ -3,28 +3,36 @@ import "./ProductCard.css";
 import { useAppDispatch } from "../../redux/hooks";
 import { addToCart } from "../../redux/cartSlice";
 
-interface ProductCardProps {
+interface Product {
   id: number;
   name: string;
   price: number;
-  image: string;
+  thumbnail: string;
+  stock: number;
+  featured: boolean;
+  active: boolean;
+}
+
+interface ProductCardProps {
+  product: Product;
 }
 
 const ProductCard = ({
-  id,
-  name,
-  price,
-  image,
+  product,
 }: ProductCardProps) => {
   const dispatch = useAppDispatch();
+
+  const image = product.thumbnail
+    ? `http://localhost:5000/uploads/products/${product.thumbnail}`
+    : "/images/no-image.png";
 
   const handleAddToCart = () => {
     dispatch(
       addToCart({
-        id,
-        name,
+        id: product.id,
+        name: product.name,
         image,
-        price,
+        price: product.price,
         quantity: 1,
       })
     );
@@ -33,21 +41,45 @@ const ProductCard = ({
   return (
     <div className="product-card">
       <div className="product-image">
-        <img src={image} alt={name} />
+        <img
+          src={image}
+          alt={product.name}
+        />
+
+        {product.featured && (
+          <span className="featured-badge">
+            ⭐ Featured
+          </span>
+        )}
       </div>
 
       <div className="product-info">
-        <h3>{name}</h3>
+        <h3>{product.name}</h3>
 
         <p className="price">
-          KES {price.toLocaleString()}
+          KES {product.price.toLocaleString()}
+        </p>
+
+        <p
+          className={
+            product.stock > 0
+              ? "in-stock"
+              : "out-of-stock"
+          }
+        >
+          {product.stock > 0
+            ? `In Stock (${product.stock})`
+            : "Out of Stock"}
         </p>
 
         <button
           className="cart-btn"
           onClick={handleAddToCart}
+          disabled={product.stock <= 0}
         >
-          Add to Cart
+          {product.stock > 0
+            ? "Add to Cart"
+            : "Out of Stock"}
         </button>
       </div>
     </div>

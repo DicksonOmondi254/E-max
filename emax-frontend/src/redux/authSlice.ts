@@ -22,9 +22,12 @@ interface AuthState {
   loading: boolean;
 }
 
+// Restore authentication after page refresh
+const storedUser = localStorage.getItem("user");
+
 const initialState: AuthState = {
-  user: null,
-  isAuthenticated: false,
+  user: storedUser ? JSON.parse(storedUser) : null,
+  isAuthenticated: !!storedUser,
   loading: false,
 };
 
@@ -43,14 +46,33 @@ const authSlice = createSlice({
       action: PayloadAction<User>
     ) => {
       state.loading = false;
+
       state.user = action.payload;
+
       state.isAuthenticated = true;
+
+      // Persist login
+      localStorage.setItem(
+        "user",
+        JSON.stringify(action.payload)
+      );
+
+      localStorage.setItem(
+        "token",
+        action.payload.token
+      );
     },
 
     logout: (state) => {
       state.user = null;
+
       state.isAuthenticated = false;
+
       state.loading = false;
+
+      // Clear storage
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
   },
 });

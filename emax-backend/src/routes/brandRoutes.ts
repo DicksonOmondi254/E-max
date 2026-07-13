@@ -8,15 +8,30 @@ import {
   deleteBrand,
 } from "../controllers/brandController";
 
-import { protect } from "../middleware/authMiddleware";
-import { authorize } from "../middleware/roleMiddleware";
+import { protect } from "../middlewares/authMiddleware";
+import { authorize } from "../middlewares/roleMiddleware";
 
 const router = Router();
 
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
+
+// Get all brands
 router.get("/", getBrands);
 
+// Get a single brand
 router.get("/:id", getBrand);
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+// Create a new brand
 router.post(
   "/",
   protect,
@@ -24,6 +39,7 @@ router.post(
   createBrand
 );
 
+// Update a brand
 router.put(
   "/:id",
   protect,
@@ -31,6 +47,7 @@ router.put(
   updateBrand
 );
 
+// Delete a brand
 router.delete(
   "/:id",
   protect,

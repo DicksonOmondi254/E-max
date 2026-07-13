@@ -1,21 +1,31 @@
-import ProductGrid from "../components/ProductGrid/ProductGrid";
+import { useEffect, useState } from "react";
+import { productService } from "../services/productService";
+import ProductCard from "../components/ProductCard/ProductCard";
 
-export default function Products(){
+const Products = () => {
+  const [products, setProducts] = useState([]);
 
-return(
+  useEffect(() => {
+    productService
+      .getProducts()
+      .then(setProducts)
+      .catch(console.error);
+  }, []);
 
-<div className="p-10">
+  return (
+    <div className="products-page">
+      <h1>Shop</h1>
 
-<h1 className="text-4xl font-bold mb-8">
+      <div className="products-grid">
+        {products.map((product: any) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-Products
-
-</h1>
-
-<ProductGrid/>
-
-</div>
-
-)
-
-}
+export default Products;

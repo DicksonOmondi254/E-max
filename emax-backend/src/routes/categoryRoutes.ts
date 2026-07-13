@@ -8,8 +8,8 @@ import {
   deleteCategory,
 } from "../controllers/categoryController";
 
-import { protect } from "../middleware/authMiddleware";
-import { authorize } from "../middleware/roleMiddleware";
+import { protect } from "../middlewares/authMiddleware";
+import { authorize } from "../middlewares/roleMiddleware";
 
 const router = Router();
 

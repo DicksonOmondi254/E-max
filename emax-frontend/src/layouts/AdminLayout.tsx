@@ -1,6 +1,9 @@
 import { Outlet } from "react-router-dom";
+
 import Sidebar from "../components/Admin/Sidebar";
-import Topbar from "../components/Admin/Topbar";
+import Header from "../components/Admin/Header";
+
+import "../styles/admin.css";
 
 const AdminLayout = () => {
   return (
@@ -10,12 +13,10 @@ const AdminLayout = () => {
 
       <div className="admin-content">
 
-        <Topbar />
+        <Header />
 
-        <main>
-
+        <main className="admin-main">
           <Outlet />
-
         </main>
 
       </div>

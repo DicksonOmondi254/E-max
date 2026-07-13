@@ -12,6 +12,10 @@ import productRoutes from "./routes/productRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
 import brandRoutes from "./routes/brandRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
+import orderRoutes from "./routes/orderRoutes";
+import cartRoutes from "./routes/cartRoutes";
+import checkoutRoutes from "./routes/checkoutRoutes";
 
 dotenv.config();
 
@@ -67,6 +71,10 @@ app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/brands", brandRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/checkout", checkoutRoutes);
 
 /*
 Future Routes

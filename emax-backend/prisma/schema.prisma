@@ -7,110 +7,195 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         Int      @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  email      String   @unique
-  phone      String   @unique
-  password   String
-  role       Role     @default(CUSTOMER)
-  isVerified Boolean  @default(false)
-  
-  reviews ProductReview[]
-
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-model Category {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  description String?
-
-  products    Product[]
-
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Brand {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  logo        String?
-
-  products    Product[]
-
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
-model Product {
-  id            Int       @id @default(autoincrement())
-
-  name          String
-  slug          String    @unique
-
-  description   String
-
-  price         Float
-
-  stock         Int       @default(0)
-
-  thumbnail     String
-
-  featured      Boolean   @default(false)
-
-  active        Boolean   @default(true)
-
-  categoryId    Int
-  category      Category  @relation(fields: [categoryId], references: [id])
-
-  brandId       Int
-  brand         Brand     @relation(fields: [brandId], references: [id])
-
-  images        ProductImage[]
-
-  reviews       ProductReview[]
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model ProductImage {
-
-  id          Int @id @default(autoincrement())
-
-  image       String
-
-  productId   Int
-
-  product     Product @relation(fields:[productId], references:[id])
-
-}
-
-model ProductReview {
-
-  id          Int @id @default(autoincrement())
-
-  rating      Int
-
-  comment     String
-
-  productId   Int
-
-  userId      Int
-
-  product     Product @relation(fields:[productId], references:[id])
-
-  user        User @relation(fields:[userId], references:[id])
-
-  createdAt   DateTime @default(now())
-
-}
-
 enum Role {
   CUSTOMER
   SELLER
   ADMIN
   SUPER_ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id         Int     @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String  @unique
+  phone      String  @unique
+  password   String
+  role       Role    @default(CUSTOMER)
+  isVerified Boolean @default(false)
+
+  reviews ProductReview[]
+  orders  Order[]
+  cart    Cart?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id   Int     @id @default(autoincrement())
+  name String  @unique
+  logo String?
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+
+  name String
+  slug String @unique
+
+  description String
+
+  price Float
+
+  stock Int @default(0)
+
+  thumbnail String
+
+  featured Boolean @default(false)
+
+  active Boolean @default(true)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  brandId Int
+  brand   Brand @relation(fields: [brandId], references: [id])
+
+  images     ProductImage[]
+  reviews    ProductReview[]
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductImage {
+  id Int @id @default(autoincrement())
+
+  image String
+
+  productId Int
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ProductReview {
+  id Int @id @default(autoincrement())
+
+  rating Int
+
+  comment String
+
+  productId Int
+
+  userId Int
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+
+  orderNumber String @unique
+
+  totalAmount Float
+
+  status OrderStatus @default(PENDING)
+
+  paymentStatus PaymentStatus @default(PENDING)
+
+  userId Int
+
+  user User @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  quantity Int
+
+  price Float
+
+  orderId Int
+
+  productId Int
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+
+  userId Int @unique
+
+  user User @relation(fields: [userId], references: [id])
+
+  items CartItem[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+  id Int @id @default(autoincrement())
+
+  quantity Int @default(1)
+
+  cartId Int
+
+  productId Int
+
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
 }
