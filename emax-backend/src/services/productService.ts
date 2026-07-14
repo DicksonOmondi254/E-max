@@ -6,7 +6,7 @@ export interface ProductData {
   description: string;
   price: number;
   stock: number;
-  thumbnail: string;
+ thumbnail: string;
   featured: boolean;
   active?: boolean;
   categoryId: number;
@@ -33,6 +33,25 @@ export const productService = {
             },
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  },
+
+  /* ==========================================
+     GET ACTIVE PRODUCTS (STORE)
+  ========================================== */
+  async getActiveProducts() {
+    return prisma.product.findMany({
+      where: {
+        active: true,
+      },
+      include: {
+        category: true,
+        brand: true,
+        images: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -69,13 +88,49 @@ export const productService = {
   ========================================== */
   async getProductBySlug(slug: string) {
     return prisma.product.findUnique({
-      where: {
-        slug,
-      },
+      where: { slug },
       include: {
         category: true,
         brand: true,
         images: true,
+        reviews: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  },
+
+  /* ==========================================
+     SEARCH PRODUCTS
+  ========================================== */
+  async searchProducts(keyword: string) {
+    return prisma.product.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: keyword,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: keyword,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      include: {
+        category: true,
+        brand: true,
       },
     });
   },
@@ -195,9 +250,55 @@ export const productService = {
   },
 
   /* ==========================================
+     TOGGLE FEATURED
+  ========================================== */
+  async toggleFeatured(id: number) {
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new Error("Product not found.");
+    }
+
+    return prisma.product.update({
+      where: { id },
+      data: {
+        featured: !product.featured,
+      },
+    });
+  },
+
+  /* ==========================================
+     TOGGLE STATUS
+  ========================================== */
+  async toggleStatus(id: number) {
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new Error("Product not found.");
+    }
+
+    return prisma.product.update({
+      where: { id },
+      data: {
+        active: !product.active,
+      },
+    });
+  },
+
+  /* ==========================================
      DELETE PRODUCT
   ========================================== */
   async deleteProduct(id: number) {
+    await prisma.productImage.deleteMany({
+      where: {
+        productId: id,
+      },
+    });
+
     return prisma.product.delete({
       where: {
         id,

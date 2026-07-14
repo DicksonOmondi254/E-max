@@ -110,6 +110,11 @@ function App() {
         }
       />
 
+      <Route
+  path="/products/:slug"
+  element={<ProductDetails />}
+/>
+
       {/* ===========================
           Admin Routes
       =========================== */}

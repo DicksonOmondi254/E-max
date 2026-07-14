@@ -298,3 +298,115 @@ export const deleteProduct = async (
     });
   }
 };
+/* =====================================================
+   GET PRODUCT BY SLUG
+===================================================== */
+
+export const getProductBySlug = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const slug = req.params.slug as string;
+
+    const product =
+      await productService.getProductBySlug(slug);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Failed to fetch product.",
+    });
+  }
+};
+
+/* =====================================================
+   TOGGLE FEATURED
+===================================================== */
+
+export const toggleFeatured = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID.",
+      });
+    }
+
+    const product =
+      await productService.toggleFeatured(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Product featured status updated.",
+      data: product,
+    });
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Failed to update featured status.",
+    });
+  }
+};
+
+/* =====================================================
+   TOGGLE PRODUCT STATUS
+===================================================== */
+
+export const toggleProductStatus = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID.",
+      });
+    }
+
+    const product =
+      await productService.toggleStatus(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Product status updated.",
+      data: product,
+    });
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Failed to update product status.",
+    });
+  }
+};

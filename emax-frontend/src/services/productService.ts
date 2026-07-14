@@ -2,10 +2,16 @@ const API_URL = "http://localhost:5000/api/products";
 
 const getToken = () => localStorage.getItem("token");
 
-const getHeaders = (isFormData = false): HeadersInit => {
-  const headers: HeadersInit = {
-    Authorization: `Bearer ${getToken()}`,
-  };
+const getHeaders = (
+  isFormData = false
+): HeadersInit => {
+  const headers: HeadersInit = {};
+
+  const token = getToken();
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   if (!isFormData) {
     headers["Content-Type"] = "application/json";
@@ -14,7 +20,9 @@ const getHeaders = (isFormData = false): HeadersInit => {
   return headers;
 };
 
-const handleResponse = async (response: Response) => {
+const handleResponse = async (
+  response: Response
+) => {
   const result = await response.json();
 
   if (!response.ok) {
@@ -24,7 +32,9 @@ const handleResponse = async (response: Response) => {
     }
 
     throw new Error(
-      result.message || "Something went wrong."
+      result.message ||
+        result.error ||
+        "Something went wrong."
     );
   }
 
@@ -32,104 +42,110 @@ const handleResponse = async (response: Response) => {
 };
 
 export const productService = {
-  async getProducts(
-    query: string = ""
-  ) {
-    try {
-      const response = await fetch(
-        `${API_URL}${query}`,
-        {
-          method: "GET",
-        }
-      );
+  /* =====================================
+     GET ALL PRODUCTS
+  ===================================== */
 
-      const result =
-        await handleResponse(response);
+  async getProducts(query = "") {
+    const response = await fetch(
+      `${API_URL}${query}`
+    );
 
-      return result.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    const result =
+      await handleResponse(response);
+
+    return result.data;
   },
+
+  /* =====================================
+     GET PRODUCT BY ID
+  ===================================== */
 
   async getProduct(id: number) {
-    try {
-      const response = await fetch(
-        `${API_URL}/${id}`
-      );
+    const response = await fetch(
+      `${API_URL}/${id}`
+    );
 
-      const result =
-        await handleResponse(response);
+    const result =
+      await handleResponse(response);
 
-      return result.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return result.data;
   },
+
+  /* =====================================
+     GET PRODUCT BY SLUG
+  ===================================== */
+
+  async getProductBySlug(slug: string) {
+    const response = await fetch(
+      `${API_URL}/slug/${encodeURIComponent(slug)}`
+    );
+
+    const result =
+      await handleResponse(response);
+
+    return result.data;
+  },
+
+  /* =====================================
+     CREATE PRODUCT
+  ===================================== */
 
   async createProduct(data: FormData) {
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: getHeaders(true),
-        body: data,
-      });
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: getHeaders(true),
+      body: data,
+    });
 
-      const result =
-        await handleResponse(response);
+    const result =
+      await handleResponse(response);
 
-      return result.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return result.data;
   },
+
+  /* =====================================
+     UPDATE PRODUCT
+  ===================================== */
 
   async updateProduct(
     id: number,
     data: FormData
   ) {
-    try {
-      const response = await fetch(
-        `${API_URL}/${id}`,
-        {
-          method: "PUT",
-          headers: getHeaders(true),
-          body: data,
-        }
-      );
+    const response = await fetch(
+      `${API_URL}/${id}`,
+      {
+        method: "PUT",
+        headers: getHeaders(true),
+        body: data,
+      }
+    );
 
-      const result =
-        await handleResponse(response);
+    const result =
+      await handleResponse(response);
 
-      return result.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return result.data;
   },
+
+  /* =====================================
+     DELETE PRODUCT
+  ===================================== */
 
   async deleteProduct(id: number) {
-    try {
-      const response = await fetch(
-        `${API_URL}/${id}`,
-        {
-          method: "DELETE",
-          headers: getHeaders(true),
-        }
-      );
+    const response = await fetch(
+      `${API_URL}/${id}`,
+      {
+        method: "DELETE",
+        headers: getHeaders(),
+      }
+    );
 
-      const result =
-        await handleResponse(response);
-
-      return result;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return handleResponse(response);
   },
+
+  /* =====================================
+     FEATURED PRODUCTS
+  ===================================== */
 
   async getFeaturedProducts() {
     const response = await fetch(
@@ -141,6 +157,10 @@ export const productService = {
 
     return result.data;
   },
+
+  /* =====================================
+     PRODUCTS BY CATEGORY
+  ===================================== */
 
   async getProductsByCategory(
     categoryId: number
@@ -155,11 +175,55 @@ export const productService = {
     return result.data;
   },
 
-  async searchProducts(keyword: string) {
+  /* =====================================
+     SEARCH PRODUCTS
+  ===================================== */
+
+  async searchProducts(
+    keyword: string
+  ) {
     const response = await fetch(
       `${API_URL}?search=${encodeURIComponent(
         keyword
       )}`
+    );
+
+    const result =
+      await handleResponse(response);
+
+    return result.data;
+  },
+
+  /* =====================================
+     TOGGLE FEATURED
+  ===================================== */
+
+  async toggleFeatured(id: number) {
+    const response = await fetch(
+      `${API_URL}/${id}/toggle-featured`,
+      {
+        method: "PATCH",
+        headers: getHeaders(),
+      }
+    );
+
+    const result =
+      await handleResponse(response);
+
+    return result.data;
+  },
+
+  /* =====================================
+     TOGGLE ACTIVE STATUS
+  ===================================== */
+
+  async toggleStatus(id: number) {
+    const response = await fetch(
+      `${API_URL}/${id}/toggle-status`,
+      {
+        method: "PATCH",
+        headers: getHeaders(),
+      }
     );
 
     const result =

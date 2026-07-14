@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import "./ProductCard.css";
 
 import { useAppDispatch } from "../../redux/hooks";
@@ -6,6 +8,7 @@ import { addToCart } from "../../redux/cartSlice";
 interface Product {
   id: number;
   name: string;
+  slug: string;
   price: number;
   thumbnail: string;
   stock: number;
@@ -41,10 +44,12 @@ const ProductCard = ({
   return (
     <div className="product-card">
       <div className="product-image">
-        <img
-          src={image}
-          alt={product.name}
-        />
+        <Link to={`/products/${product.slug}`}>
+          <img
+            src={image}
+            alt={product.name}
+          />
+        </Link>
 
         {product.featured && (
           <span className="featured-badge">
@@ -54,7 +59,12 @@ const ProductCard = ({
       </div>
 
       <div className="product-info">
-        <h3>{product.name}</h3>
+        <Link
+          to={`/products/${product.slug}`}
+          className="product-link"
+        >
+          <h3>{product.name}</h3>
+        </Link>
 
         <p className="price">
           KES {product.price.toLocaleString()}
