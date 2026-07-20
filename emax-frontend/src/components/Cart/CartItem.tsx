@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import {
   increaseQuantity,
   decreaseQuantity,
@@ -10,6 +11,8 @@ import {
 
 import type { CartItem as Item } from "../../redux/cartSlice";
 
+const FALLBACK_IMAGE = "/images/no-image.svg";
+
 interface Props {
   item: Item;
 }
@@ -17,12 +20,20 @@ interface Props {
 const CartItem = ({ item }: Props) => {
   const dispatch = useAppDispatch();
 
+  const handleImageError = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      e.currentTarget.src = FALLBACK_IMAGE;
+    },
+    []
+  );
+
   return (
     <div className="cart-item">
 
       <img
         src={item.image}
         alt={item.name}
+        onError={handleImageError}
       />
 
       <div className="cart-info">

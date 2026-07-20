@@ -1,24 +1,24 @@
-import { Response, NextFunction } from "express";
-import { AuthRequest } from "./authMiddleware";
+import { Request, Response, NextFunction } from "express";
+import { Role } from "@prisma/client";
 
 export const authorize =
-  (...roles: string[]) =>
+  (...roles: Role[]) =>
   (
-    req: AuthRequest,
+    req: Request,
     res: Response,
     next: NextFunction
   ) => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized",
+        message: "Unauthorized. Please log in.",
       });
     }
 
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: "Access denied.",
+        message: "Access denied. You do not have permission to perform this action.",
       });
     }
 

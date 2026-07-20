@@ -12,7 +12,7 @@ const UPLOAD_PATH = path.join(
 );
 
 /* =====================================================
-   GET ALL PRODUCTS
+   GET PRODUCTS (SEARCH / FILTER / SORT / PAGINATION)
 ===================================================== */
 
 export const getProducts = async (
@@ -20,20 +20,75 @@ export const getProducts = async (
   res: Response
 ) => {
   try {
-    const products =
-      await productService.getAllProducts();
+    const {
+      search,
+      category,
+      brand,
+      featured,
+      active,
+      minPrice,
+      maxPrice,
+      page,
+      limit,
+      sort,
+    } = req.query;
+
+    const result = await productService.getProducts({
+      search: search
+        ? String(search)
+        : undefined,
+
+      category: category
+        ? Number(category)
+        : undefined,
+
+      brand: brand
+        ? Number(brand)
+        : undefined,
+
+      featured:
+        featured === undefined
+          ? undefined
+          : featured === "true",
+
+      active:
+        active === undefined
+          ? undefined
+          : active === "true",
+
+      minPrice: minPrice
+        ? Number(minPrice)
+        : undefined,
+
+      maxPrice: maxPrice
+        ? Number(maxPrice)
+        : undefined,
+
+      page: page
+        ? Number(page)
+        : 1,
+
+      limit: limit
+        ? Number(limit)
+        : 12,
+
+      sort: sort
+        ? String(sort)
+        : "newest",
+    });
 
     res.status(200).json({
       success: true,
-      count: products.length,
-      data: products,
+      ...result,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
 
     res.status(500).json({
       success: false,
-      message: "Failed to fetch products.",
+      message:
+        error.message ||
+        "Failed to fetch products.",
     });
   }
 };
@@ -66,16 +121,18 @@ export const getProduct = async (
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
       data: product,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
 
     res.status(500).json({
       success: false,
-      message: "Failed to fetch product.",
+      message:
+        error.message ||
+        "Failed to fetch product.",
     });
   }
 };

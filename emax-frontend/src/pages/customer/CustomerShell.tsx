@@ -1,0 +1,39 @@
+import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
+import DashboardSidebar from "../../components/Dashboard/DashboardSidebar";
+import DashboardHeader from "../../components/Dashboard/DashboardHeader";
+
+const CustomerShell = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) => {
+  return (
+    <div className="dashboard">
+      <DashboardSidebar />
+
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <DashboardHeader />
+        </div>
+
+        <div className="dashboard-page-title">
+          <h2>{title}</h2>
+          <div className="dashboard-breadcrumbs">
+            <Link to="/dashboard">Dashboard</Link>
+            <span>/</span>
+            <span>{title}</span>
+          </div>
+        </div>
+
+        <div className="dashboard-page-body">{children}</div>
+      </div>
+    </div>
+  );
+};
+
+export default CustomerShell;
+
+

@@ -35,6 +35,15 @@ transition:.3s;
 background:#1e293b;
 }
 
+.dashboard-sidebar a{
+color:inherit;
+text-decoration:none;
+}
+
+.dashboard-sidebar li span{
+color:inherit;
+}
+
 .dashboard-content{
 padding:35px;
 }
@@ -128,6 +137,81 @@ color:#0057ff;
   transition: 0.3s;
 }
 
-.action-btn:hover {
+action-btn:hover {
   background: #003eb8;
 }
+
+/* Customer dashboard pages */
+.dashboard-page-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.dashboard-breadcrumbs {
+  color: #64748b;
+  font-size: 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dashboard-breadcrumbs a {
+  color: #0057ff;
+  text-decoration: none;
+}
+
+.dashboard-breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.dashboard-page-body {
+  padding-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 14px;
+  }
+
+  .dashboard-content {
+    padding: 18px;
+  }
+
+  .dashboard-sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-sidebar h2 {
+    margin-bottom: 18px;
+    font-size: 18px;
+  }
+
+  .dashboard-sidebar li {
+    padding: 10px;
+  }
+
+  .dashboard-page-title h2 {
+    font-size: 20px;
+  }
+
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+

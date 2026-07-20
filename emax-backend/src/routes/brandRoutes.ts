@@ -1,4 +1,7 @@
 import { Router } from "express";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 import {
   getBrands,
@@ -12,6 +15,61 @@ import { protect } from "../middlewares/authMiddleware";
 import { authorize } from "../middlewares/roleMiddleware";
 
 const router = Router();
+
+/* ==========================================
+   Brand Logo Upload Middleware
+========================================== */
+
+const brandDir = "uploads/brands";
+
+if (!fs.existsSync(brandDir)) {
+  fs.mkdirSync(brandDir, { recursive: true });
+}
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, brandDir);
+  },
+
+  filename(req, file, cb) {
+    const unique =
+      Date.now() +
+      "-" +
+      Math.round(Math.random() * 1e9);
+
+    cb(
+      null,
+      unique + path.extname(file.originalname)
+    );
+  },
+});
+
+const upload = multer({
+  storage,
+
+  fileFilter: (req, file, cb) => {
+    const allowed = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+    ];
+
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(
+        new Error(
+          "Only JPG, JPEG, PNG and WEBP images are allowed."
+        )
+      );
+    }
+  },
+
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +94,7 @@ router.post(
   "/",
   protect,
   authorize("ADMIN", "SUPER_ADMIN"),
+  upload.single("logo"),
   createBrand
 );
 
@@ -44,6 +103,7 @@ router.put(
   "/:id",
   protect,
   authorize("ADMIN", "SUPER_ADMIN"),
+  upload.single("logo"),
   updateBrand
 );
 

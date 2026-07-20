@@ -22,9 +22,13 @@ interface Product {
 }
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id ?? params.slug;
+
+
 
   const [loading, setLoading] = useState(true);
+
 
   const [product, setProduct] =
     useState<Product | null>(null);

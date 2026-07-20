@@ -13,9 +13,14 @@ import categoryRoutes from "./routes/categoryRoutes";
 import brandRoutes from "./routes/brandRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
+import dashboardCustomerRoutes from "./routes/dashboardCustomerRoutes";
+
 import orderRoutes from "./routes/orderRoutes";
 import cartRoutes from "./routes/cartRoutes";
 import checkoutRoutes from "./routes/checkoutRoutes";
+import reviewRoutes from "./routes/reviewRoutes";
+import wishlistRoutes from "./routes/wishlistRoutes";
+import customerRoutes from "./routes/customerRoutes";
 
 dotenv.config();
 
@@ -37,7 +42,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: "cross-origin",
+    },
+  })
+);
 
 app.use(compression());
 
@@ -72,9 +83,17 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/brands", brandRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+// Customer-specific route set (keeps existing admin/global dashboard intact)
+app.use("/api/dashboard/customer", dashboardCustomerRoutes);
+
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+
+// Admin customer management
+app.use("/api/admin/customers", customerRoutes);
 
 /*
 Future Routes

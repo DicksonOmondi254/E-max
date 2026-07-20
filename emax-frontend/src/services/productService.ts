@@ -198,9 +198,9 @@ export const productService = {
      TOGGLE FEATURED
   ===================================== */
 
-  async toggleFeatured(id: number) {
+async toggleFeatured(id: number) {
     const response = await fetch(
-      `${API_URL}/${id}/toggle-featured`,
+      `${API_URL}/${id}/featured`,
       {
         method: "PATCH",
         headers: getHeaders(),
@@ -219,7 +219,7 @@ export const productService = {
 
   async toggleStatus(id: number) {
     const response = await fetch(
-      `${API_URL}/${id}/toggle-status`,
+      `${API_URL}/${id}/status`,
       {
         method: "PATCH",
         headers: getHeaders(),

@@ -1,59 +1,66 @@
+import { useEffect, useState } from "react";
+
+import { Link } from "react-router-dom";
+
+import { brandService } from "../../services/brandService";
+
+
 import "./BrandShowcase.css";
 
-const brands=[
+type Brand = {
+  id: number;
+  name: string;
+};
 
-"Apple",
 
-"Samsung",
 
-"HP",
+const BrandShowcase = () => {
+  const [brands, setBrands] = useState<Brand[]>([]);
 
-"Dell",
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const brandData = await brandService.getAllBrands();
+        setBrands(brandData);
+      } catch (e) {
+        console.error(e);
+      }
+    };
 
-"Lenovo",
+    load();
+  }, []);
 
-"Sony",
 
-"JBL",
+  return (
+    <section className="brands">
+      <h2>Top Brands</h2>
 
-"Asus"
+      <div className="brand-grid">
+        {brands.map((brand) => {
+          return (
 
-];
+            <div
+              key={brand.id}
+              className="brand-card"
+            >
+              <div className="brand-card__name">
+                <span>{brand.name}</span>
+              </div>
 
-const BrandShowcase=()=>{
+              <Link
+                to={`/brands/${brand.id}`}
+                className="brand-card__cta"
+              >
+                View products
+              </Link>
 
-return(
-
-<section className="brands">
-
-<h2>
-
-Top Brands
-
-</h2>
-
-<div className="brand-grid">
-
-{
-
-brands.map(brand=>(
-
-<div key={brand} className="brand-card">
-
-{brand}
-
-</div>
-
-))
-
-}
-
-</div>
-
-</section>
-
-)
-
-}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
 
 export default BrandShowcase;
+

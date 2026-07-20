@@ -38,7 +38,15 @@ const ProductInfo = () => {
           Buy Now
         </button>
 
-        <button className="cart">
+        <button
+          className="cart"
+          type="button"
+          onClick={() => {
+            // Add to cart via existing ProductCard flow.
+            // This placeholder component is not data-driven.
+            // Actual add-to-cart happens in ProductCard/Add-to-Cart buttons.
+          }}
+        >
           <FaShoppingCart />
           Add to Cart
         </button>

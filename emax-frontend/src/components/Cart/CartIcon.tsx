@@ -24,11 +24,17 @@ const CartIcon = ({ onClick }: Props) => {
       <FaShoppingCart size={24} />
 
       {totalItems > 0 && (
-        <span className="cart-badge">
+        <span
+          className="cart-badge"
+          aria-live="polite"
+          aria-label={`${totalItems} items in cart`}
+        >
           {totalItems}
         </span>
       )}
+
     </div>
+
   );
 };
 

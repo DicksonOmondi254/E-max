@@ -1,0 +1,38 @@
+.side-tabs {
+  width: 260px;
+  max-width: 100%;
+  border: 1px solid rgba(0, 87, 255, 0.15);
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.side-tabs__header {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.side-tabs__tab {
+  flex: 1;
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: 12px 10px;
+  cursor: pointer;
+  font-weight: 700;
+  color: #1f2937;
+  transition: background 0.2s, color 0.2s;
+}
+
+.side-tabs__tab--active {
+  background: #0057ff;
+  color: #ffffff;
+}
+
+.side-tabs__content {
+  padding: 12px;
+  max-height: 420px;
+  overflow: auto;
+}
+

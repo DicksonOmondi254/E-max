@@ -1,4 +1,5 @@
 import { prisma } from "../config/prisma";
+import { Prisma } from "@prisma/client";
 
 export interface ProductData {
   name: string;
@@ -13,10 +14,144 @@ export interface ProductData {
   brandId: number;
 }
 
+export interface ProductQuery {
+  search?: string;
+  category?: number;
+  brand?: number;
+  featured?: boolean;
+  active?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
+  sort?: string;
+}
+
 export const productService = {
   /* ==========================================
      GET ALL PRODUCTS
   ========================================== */
+  
+ /* ==========================================
+   ADVANCED PRODUCT SEARCH
+========================================== */
+async getProducts(query: ProductQuery) {
+  const page = query.page ?? 1;
+  const limit = query.limit ?? 12;
+  const skip = (page - 1) * limit;
+
+  const where: Prisma.ProductWhereInput = {};
+
+  if (query.search) {
+    where.OR = [
+      {
+        name: {
+          contains: query.search,
+          mode: "insensitive",
+        },
+      },
+      {
+        description: {
+          contains: query.search,
+          mode: "insensitive",
+        },
+      },
+    ];
+  }
+
+  if (query.category) {
+    where.categoryId = query.category;
+  }
+
+  if (query.brand) {
+    where.brandId = query.brand;
+  }
+
+  if (query.featured !== undefined) {
+    where.featured = query.featured;
+  }
+
+  if (query.active !== undefined) {
+    where.active = query.active;
+  }
+
+  if (
+    query.minPrice !== undefined ||
+    query.maxPrice !== undefined
+  ) {
+    where.price = {};
+
+    if (query.minPrice !== undefined) {
+      where.price.gte = query.minPrice;
+    }
+
+    if (query.maxPrice !== undefined) {
+      where.price.lte = query.maxPrice;
+    }
+  }
+
+  let orderBy: Prisma.ProductOrderByWithRelationInput = {
+    createdAt: "desc",
+  };
+
+  switch (query.sort) {
+    case "price_asc":
+      orderBy = { price: "asc" };
+      break;
+
+    case "price_desc":
+      orderBy = { price: "desc" };
+      break;
+
+    case "name_asc":
+      orderBy = { name: "asc" };
+      break;
+
+    case "name_desc":
+      orderBy = { name: "desc" };
+      break;
+
+    case "oldest":
+      orderBy = { createdAt: "asc" };
+      break;
+
+    case "newest":
+      orderBy = { createdAt: "desc" };
+      break;
+  }
+
+  const [products, total] = await Promise.all([
+    prisma.product.findMany({
+      where,
+
+      include: {
+        category: true,
+        brand: true,
+        images: true,
+        reviews: true,
+      },
+
+      skip,
+
+      take: limit,
+
+      orderBy,
+    }),
+
+    prisma.product.count({
+      where,
+    }),
+  ]);
+
+  return {
+    page,
+    limit,
+    total,
+    pages: Math.ceil(total / limit),
+    data: products,
+  };
+}, 
+  
   async getAllProducts() {
     return prisma.product.findMany({
       include: {

@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductsPage from "./pages/products";
 import ProductDetails from "./pages/ProductDetails";
+import Cart from "./pages/Cart";
 
 // ===========================
 // Customer Pages
@@ -113,6 +114,14 @@ function App() {
       <Route
   path="/products/:slug"
   element={<ProductDetails />}
+/>
+<Route
+  path="/cart"
+  element={
+    <ProtectedRoute>
+      <Cart />
+    </ProtectedRoute>
+  }
 />
 
       {/* ===========================

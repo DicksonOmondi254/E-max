@@ -7,6 +7,8 @@ import RecentlyViewed from "../components/Dashboard/RecentlyViewed";
 import Notifications from "../components/Dashboard/Notifications";
 import RewardPoints from "../components/Dashboard/RewardPoints";
 import QuickActions from "../components/Dashboard/QuickActions";
+import CartPreview from "../components/Dashboard/CartPreview";
+
 
 import "../components/Dashboard/Dashboard.css";
 
@@ -25,15 +27,11 @@ const Dashboard = () => {
         <div className="dashboard-sections">
 
           <RecentOrders />
-
           <WishlistPreview />
-
+          <CartPreview />
           <RecentlyViewed />
-
           <RewardPoints />
-
           <Notifications />
-
           <QuickActions />
 
         </div>
@@ -43,5 +41,6 @@ const Dashboard = () => {
     </div>
   );
 };
+
 
 export default Dashboard;

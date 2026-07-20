@@ -1,71 +1,85 @@
 import "./FlashSale.css";
 
+
+import { useEffect, useMemo, useState } from "react";
+
 import Countdown from "./Countdown";
 import FlashSaleCard from "./FlashSaleCard";
 
-const flashProducts = [
-  {
-    name: "iPhone 16 Pro",
-    image: "/images/iphone.png",
-    price: 185000,
-    oldPrice: 205000,
-    rating: 4.9,
-    discount: 10,
-  },
-  {
-    name: "Galaxy S25 Ultra",
-    image: "/images/samsung.png",
-    price: 170000,
-    oldPrice: 190000,
-    rating: 4.8,
-    discount: 11,
-  },
-  {
-    name: "MacBook Pro M4",
-    image: "/images/macbook.png",
-    price: 320000,
-    oldPrice: 350000,
-    rating: 5.0,
-    discount: 9,
-  },
-  {
-    name: "Sony WH-1000XM5",
-    image: "/images/sony.png",
-    price: 58000,
-    oldPrice: 65000,
-    rating: 4.7,
-    discount: 12,
-  },
-];
+import { productService } from "../../services/productService";
+
+
+type Product = {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  thumbnail: string;
+  stock: number;
+  featured: boolean;
+  active: boolean;
+};
 
 const FlashSale = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        // No explicit “flashSale” endpoint exists in backend.
+        // Use featured products as flash sale inventory for now.
+        const data = await productService.getFeaturedProducts();
+        setProducts(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    load();
+  }, []);
+
+  const flashProducts = useMemo(() => {
+    // Create a deterministic “discount” based on current price so UI remains consistent.
+    // If you add a backend flash-sale field later, this can be replaced.
+    return products
+      .filter((p) => p.active && p.stock > 0)
+      .slice(0, 4)
+      .map((p, idx) => {
+        const discount = 8 + idx * 2;
+        const oldPrice = Math.round(p.price * (1 + discount / 100));
+
+        return {
+          name: p.name,
+          image: `http://localhost:5000/uploads/products/${p.thumbnail}`,
+          price: p.price,
+          oldPrice,
+          rating: 4.6,
+          discount,
+        };
+      });
+  }, [products]);
+
   return (
     <section className="flash-sale">
-
       <div className="flash-header">
-
         <div>
           <h2>🔥 Flash Sale</h2>
           <p>Limited-time offers on genuine electronics.</p>
         </div>
-
         <Countdown />
-
       </div>
 
       <div className="flash-grid">
-
         {flashProducts.map((product) => (
           <FlashSaleCard
             key={product.name}
             {...product}
           />
         ))}
-
       </div>
-
     </section>
   );
 };
 
 export default FlashSale;
+

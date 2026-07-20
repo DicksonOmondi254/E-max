@@ -1,11 +1,17 @@
 import { PrismaClient } from "@prisma/client";
 
-export const prisma = new PrismaClient();
+declare global {
+  // Prevent multiple Prisma instances during development
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClient | undefined;
+}
 
-prisma.$connect()
-  .then(() => {
-    console.log("✅ PostgreSQL Connected");
-  })
-  .catch((err) => {
-    console.error("❌ Database Connection Failed", err);
+export const prisma =
+  global.prisma ??
+  new PrismaClient({
+    log: ["error", "warn"],
   });
+
+if (process.env.NODE_ENV !== "production") {
+  global.prisma = prisma;
+}
