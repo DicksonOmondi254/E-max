@@ -693,7 +693,7 @@ main{
 }
 
 .contact-icon {
-  color: #9ca3af;
+  color: #7ea7ee;
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -3891,6 +3891,157 @@ main{
 .review-detail-actions {
   display: flex;
   gap: 10px;
+}
+
+/* Star Display (for StarDisplay component) */
+.star-filled {
+  color: #f59e0b;
+}
+
+.star-empty {
+  color: #d1d5db;
+}
+
+.star-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-display svg {
+  font-size: 13px;
+}
+
+/* Rating Cell in Table */
+.review-rating-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-rating-number {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Comment Text in Table */
+.review-comment-text {
+  font-size: 13px;
+  color: #374151;
+  line-height: 1.4;
+  margin: 0;
+  max-width: 300px;
+}
+
+/* Product Link in Modal */
+.review-product-link {
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+/* Page Header Left */
+.page-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Review Detail - Rating in Header */
+.review-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fefce8;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+}
+
+.review-detail-rating .star-display svg {
+  font-size: 16px;
+}
+
+.review-detail-rating-number {
+  font-size: 14px;
+  font-weight: 700;
+  color: #92400e;
+}
+
+/* Review Detail - Comment Text */
+.review-detail-comment-text {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Review Detail - Actions Section */
+.review-detail-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Additional Skeleton Cells for Reviews */
+.skeleton-cell--product-name {
+  height: 18px;
+  width: 140px;
+}
+
+.skeleton-cell--rating {
+  height: 20px;
+  width: 90px;
+}
+
+.skeleton-cell--stars {
+  height: 20px;
+  width: 80px;
+}
+
+/* Admin Table base (for reviews table) */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.admin-table thead th {
+  padding: 12px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e5e7eb;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+  text-align: left;
+}
+
+.admin-table thead th:hover {
+  color: #374151;
+}
+
+.admin-table tbody tr {
+  transition: background 0.15s;
+}
+
+.admin-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.admin-table tbody tr.selected {
+  background: #eff6ff;
+}
+
+.admin-table tbody td {
+  padding: 14px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
 }
 
 /* Responsive Reviews */

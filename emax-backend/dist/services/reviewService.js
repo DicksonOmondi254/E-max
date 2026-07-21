@@ -91,4 +91,99 @@ exports.reviewService = {
             averageRating: Number(average.toFixed(1)),
         };
     },
+    /* ==========================================
+       ADMIN: GET ALL REVIEWS (paginated)
+    ========================================== */
+    async getAllReviews(params) {
+        const { page = 1, limit = 20, search = "", sortBy = "createdAt", sortOrder = "desc", } = params;
+        const where = {};
+        if (search) {
+            where.OR = [
+                {
+                    comment: { contains: search, mode: "insensitive" },
+                },
+                {
+                    user: {
+                        OR: [
+                            { firstName: { contains: search, mode: "insensitive" } },
+                            { lastName: { contains: search, mode: "insensitive" } },
+                            { email: { contains: search, mode: "insensitive" } },
+                        ],
+                    },
+                },
+                {
+                    product: {
+                        name: { contains: search, mode: "insensitive" },
+                    },
+                },
+            ];
+        }
+        const orderBy = {};
+        const sortFieldMap = {
+            rating: "rating",
+            createdAt: "createdAt",
+            comment: "comment",
+            product: "productId",
+            user: "userId",
+        };
+        const field = sortFieldMap[sortBy] || "createdAt";
+        orderBy[field] = sortOrder;
+        const [reviews, total] = await Promise.all([
+            prisma_1.prisma.productReview.findMany({
+                where,
+                orderBy,
+                skip: (page - 1) * limit,
+                take: limit,
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                        },
+                    },
+                    product: {
+                        select: {
+                            id: true,
+                            name: true,
+                            slug: true,
+                            thumbnail: true,
+                        },
+                    },
+                },
+            }),
+            prisma_1.prisma.productReview.count({ where }),
+        ]);
+        return {
+            reviews,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+            },
+        };
+    },
+    /* ==========================================
+       ADMIN: GET REVIEW STATS
+    ========================================== */
+    async getReviewStats() {
+        const reviews = await prisma_1.prisma.productReview.findMany({
+            select: { rating: true },
+        });
+        const total = reviews.length;
+        const average = total === 0
+            ? 0
+            : reviews.reduce((sum, r) => sum + r.rating, 0) / total;
+        const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+        reviews.forEach((r) => {
+            distribution[r.rating] = (distribution[r.rating] || 0) + 1;
+        });
+        return {
+            totalReviews: total,
+            averageRating: Number(average.toFixed(1)),
+            distribution,
+        };
+    },
 };

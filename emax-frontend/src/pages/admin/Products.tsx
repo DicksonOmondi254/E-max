@@ -10,9 +10,6 @@ import {
   FaPlus,
   FaChevronLeft,
   FaChevronRight,
-  FaSort,
-  FaSortUp,
-  FaSortDown,
 } from "react-icons/fa";
 
 import ProductTable from "../../components/Admin/ProductTable";
@@ -54,8 +51,8 @@ const Products = () => {
   const [activeFilter, setActiveFilter] = useState("all");
 
   const [page, setPage] = useState(1);
-  const [sortBy, setSortBy] = useState<SortField>("name");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [sortBy, _setSortBy] = useState<SortField>("name");
+  const [sortOrder, _setSortOrder] = useState<SortOrder>("asc");
 
   const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
 

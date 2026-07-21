@@ -230,3 +230,73 @@ model WishlistItem {
 
   @@unique([wishlistId, productId])
 }
+
+enum ZoneType {
+  LOCAL
+  REGIONAL
+  INTERNATIONAL
+}
+
+enum ZoneStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model ShippingZone {
+  id             Int        @id @default(autoincrement())
+  name           String
+  regions        String
+  fee            Float
+  estimatedDays  String
+  zoneType       ZoneType   @default(LOCAL)
+  status         ZoneStatus @default(ACTIVE)
+  freeThreshold  Float      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShippingSettings {
+  id            Int   @id @default(autoincrement())
+  defaultFee    Float @default(350)
+  freeThreshold Float @default(5000)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StoreSettings {
+  id              Int    @id @default(autoincrement())
+  
+  // General
+  storeName       String @default("E-Max Store")
+  tagline         String @default("Your Premium Shopping Destination")
+  supportEmail    String @default("support@emaxstore.com")
+  supportPhone    String @default("+254 700 123 456")
+  address         String @default("123 Kenyatta Avenue, Nairobi, Kenya")
+  currency        String @default("KES")
+  timezone        String @default("Africa/Nairobi")
+
+  // Appearance
+  logo            String @default("")
+  primaryColor    String @default("#6366f1")
+  secondaryColor  String @default("#8b5cf6")
+  accentColor     String @default("#f59e0b")
+  backgroundColor String @default("#f5f6fa")
+  darkMode        Boolean @default(false)
+
+  // Payment - stored as JSON string
+  paymentMethods  String @default("[]")
+
+  // Notifications - stored as JSON string
+  notifications   String @default("[]")
+
+  // SEO
+  metaTitle        String @default("E-Max Store - Premium Shopping")
+  metaDescription  String @default("Discover the best deals on electronics, fashion, home goods at E-Max Store.")
+  googleAnalyticsId String @default("")
+  maintenanceMode  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

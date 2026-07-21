@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteReview = exports.updateReview = exports.getProductReviews = exports.createReview = void 0;
+exports.getReviewStats = exports.getAllReviews = exports.deleteReview = exports.updateReview = exports.getProductReviews = exports.createReview = void 0;
 const reviewService_1 = require("../services/reviewService");
 const reviewValidation_1 = require("../validations/reviewValidation");
 /* ==========================================
@@ -109,3 +109,56 @@ const deleteReview = async (req, res) => {
     }
 };
 exports.deleteReview = deleteReview;
+/* ==========================================
+   ADMIN: GET ALL REVIEWS (paginated)
+========================================== */
+const getAllReviews = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 20;
+        const search = req.query.search || "";
+        const sortBy = req.query.sortBy || "createdAt";
+        const sortOrder = req.query.sortOrder || "desc";
+        const result = await reviewService_1.reviewService.getAllReviews({
+            page,
+            limit,
+            search,
+            sortBy,
+            sortOrder,
+        });
+        res.status(200).json({
+            success: true,
+            ...result,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: error.message ||
+                "Failed to fetch reviews.",
+        });
+    }
+};
+exports.getAllReviews = getAllReviews;
+/* ==========================================
+   ADMIN: GET REVIEW STATS
+========================================== */
+const getReviewStats = async (req, res) => {
+    try {
+        const stats = await reviewService_1.reviewService.getReviewStats();
+        res.status(200).json({
+            success: true,
+            data: stats,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: error.message ||
+                "Failed to fetch review statistics.",
+        });
+    }
+};
+exports.getReviewStats = getReviewStats;

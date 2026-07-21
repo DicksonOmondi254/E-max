@@ -21,6 +21,8 @@ import checkoutRoutes from "./routes/checkoutRoutes";
 import reviewRoutes from "./routes/reviewRoutes";
 import wishlistRoutes from "./routes/wishlistRoutes";
 import customerRoutes from "./routes/customerRoutes";
+import shippingRoutes from "./routes/shippingRoutes";
+import storeSettingsRoutes from "./routes/storeSettingsRoutes";
 
 dotenv.config();
 
@@ -94,6 +96,12 @@ app.use("/api/wishlist", wishlistRoutes);
 
 // Admin customer management
 app.use("/api/admin/customers", customerRoutes);
+
+// Shipping
+app.use("/api/shipping", shippingRoutes);
+
+// Store Settings
+app.use("/api/store-settings", storeSettingsRoutes);
 
 /*
 Future Routes

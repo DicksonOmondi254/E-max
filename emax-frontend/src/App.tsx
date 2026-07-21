@@ -53,6 +53,8 @@ import EditBrand from "./pages/admin/EditBrand";
 // ===========================
 import Orders from "./pages/admin/Orders";
 import Customers from "./pages/admin/Customers";
+import Reviews from "./pages/admin/Reviews";
+import Settings from "./pages/admin/Settings";
 
 // ===========================
 // Protected Route
@@ -198,10 +200,22 @@ function App() {
           element={<Orders />}
         />
 
-        {/* Customers */}
+{/* Customers */}
         <Route
           path="customers"
           element={<Customers />}
+        />
+
+        {/* Reviews */}
+        <Route
+          path="reviews"
+          element={<Reviews />}
+        />
+
+        {/* Settings */}
+        <Route
+          path="settings"
+          element={<Settings />}
         />
       </Route>
     </Routes>

@@ -17,11 +17,15 @@ const categoryRoutes_1 = __importDefault(require("./routes/categoryRoutes"));
 const brandRoutes_1 = __importDefault(require("./routes/brandRoutes"));
 const uploadRoutes_1 = __importDefault(require("./routes/uploadRoutes"));
 const dashboardRoutes_1 = __importDefault(require("./routes/dashboardRoutes"));
+const dashboardCustomerRoutes_1 = __importDefault(require("./routes/dashboardCustomerRoutes"));
 const orderRoutes_1 = __importDefault(require("./routes/orderRoutes"));
 const cartRoutes_1 = __importDefault(require("./routes/cartRoutes"));
 const checkoutRoutes_1 = __importDefault(require("./routes/checkoutRoutes"));
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
 const wishlistRoutes_1 = __importDefault(require("./routes/wishlistRoutes"));
+const customerRoutes_1 = __importDefault(require("./routes/customerRoutes"));
+const shippingRoutes_1 = __importDefault(require("./routes/shippingRoutes"));
+const storeSettingsRoutes_1 = __importDefault(require("./routes/storeSettingsRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 /* ===========================================
@@ -62,11 +66,19 @@ app.use("/api/categories", categoryRoutes_1.default);
 app.use("/api/brands", brandRoutes_1.default);
 app.use("/api/upload", uploadRoutes_1.default);
 app.use("/api/dashboard", dashboardRoutes_1.default);
+// Customer-specific route set (keeps existing admin/global dashboard intact)
+app.use("/api/dashboard/customer", dashboardCustomerRoutes_1.default);
 app.use("/api/orders", orderRoutes_1.default);
 app.use("/api/cart", cartRoutes_1.default);
 app.use("/api/checkout", checkoutRoutes_1.default);
 app.use("/api/reviews", reviewRoutes_1.default);
 app.use("/api/wishlist", wishlistRoutes_1.default);
+// Admin customer management
+app.use("/api/admin/customers", customerRoutes_1.default);
+// Shipping
+app.use("/api/shipping", shippingRoutes_1.default);
+// Store Settings
+app.use("/api/store-settings", storeSettingsRoutes_1.default);
 /*
 Future Routes
 
