@@ -1,16 +1,27 @@
 import { Link } from "react-router-dom";
 
 import RegisterForm from "../components/Auth/RegisterForm";
+import { useStoreSettings } from "../hooks/useStoreSettings";
 
 import "../components/Auth/Auth.css";
 
 const Register = () => {
+  const { logo, storeName } = useStoreSettings();
+
   return (
     <div className="auth-page">
       <div className="auth-container">
         <div className="auth-left">
           <div className="auth-brand">
-            <h1>E-Max</h1>
+            {logo ? (
+              <img
+                src={logo}
+                alt={`${storeName} logo`}
+                className="auth-logo"
+              />
+            ) : (
+              <h1>{storeName}</h1>
+            )}
 
             <p>
               Genuine Electronics &

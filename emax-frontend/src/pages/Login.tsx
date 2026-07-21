@@ -1,17 +1,28 @@
 import { Link } from "react-router-dom";
 
 import LoginForm from "../components/Auth/LoginForm";
+import { useStoreSettings } from "../hooks/useStoreSettings";
 
 import "../components/Auth/Auth.css";
 
 const Login = () => {
+  const { logo, storeName } = useStoreSettings();
+
   return (
     <div className="auth-page">
       <div className="auth-container">
         {/* Left Section */}
         <div className="auth-left">
           <div className="auth-brand">
-            <h1>E-Max</h1>
+            {logo ? (
+              <img
+                src={logo}
+                alt={`${storeName} logo`}
+                className="auth-logo"
+              />
+            ) : (
+              <h1>{storeName}</h1>
+            )}
 
             <p>
               Genuine Electronics
@@ -33,7 +44,7 @@ const Login = () => {
 
           <p className="auth-subtitle">
             Sign in to continue shopping, track your orders, manage your
-            wishlist, and access your E-Max account.
+            wishlist, and access your {storeName} account.
           </p>
 
           <LoginForm />
