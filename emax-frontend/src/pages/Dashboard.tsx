@@ -9,38 +9,39 @@ import RewardPoints from "../components/Dashboard/RewardPoints";
 import QuickActions from "../components/Dashboard/QuickActions";
 import CartPreview from "../components/Dashboard/CartPreview";
 
-
 import "../components/Dashboard/Dashboard.css";
 
 const Dashboard = () => {
   return (
     <div className="dashboard">
-
       <DashboardSidebar />
-
       <div className="dashboard-content">
-
-        <DashboardHeader />
-
-        <DashboardOverview />
-
-        <div className="dashboard-sections">
-
-          <RecentOrders />
-          <WishlistPreview />
-          <CartPreview />
-          <RecentlyViewed />
-          <RewardPoints />
-          <Notifications />
-          <QuickActions />
-
+        <div className="dashboard-hero">
+          <DashboardHeader />
+          <section className="dashboard-section fade-in">
+            <DashboardOverview />
+          </section>
         </div>
-
+        <section className="dashboard-section fade-in-delay-1">
+          <div className="dashboard-card-grid">
+            <RecentOrders />
+            <CartPreview />
+            <WishlistPreview />
+          </div>
+        </section>
+        <section className="dashboard-section fade-in-delay-2">
+          <div className="dashboard-card-grid">
+            <RewardPoints />
+            <QuickActions />
+            <Notifications />
+          </div>
+        </section>
+        <section className="dashboard-section fade-in-delay-3">
+          <RecentlyViewed />
+        </section>
       </div>
-
     </div>
   );
 };
-
 
 export default Dashboard;

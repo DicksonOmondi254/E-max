@@ -1,69 +1,97 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
 // ===========================
-// Public Pages
+// Lazy-loaded Pages (code-split)
 // ===========================
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ProductsPage from "./pages/products";
-import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/Cart";
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ProductsPage = lazy(() => import("./pages/products"));
+const ProductDetails = lazy(() => import("./pages/ProductDetails"));
+const Cart = lazy(() => import("./pages/Cart"));
 
 // ===========================
 // Customer Pages
 // ===========================
-import Dashboard from "./pages/Dashboard";
-import Checkout from "./pages/Checkout";
-import Payment from "./pages/Payment";
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Payment = lazy(() => import("./pages/Payment"));
+
+// ===========================
+// Customer Dashboard Sub-Pages
+// ===========================
+const CustomerOrders = lazy(() => import("./pages/customer/CustomerOrders"));
+const CustomerWishlist = lazy(() => import("./pages/customer/CustomerWishlist"));
+const CustomerAddresses = lazy(() => import("./pages/customer/CustomerAddresses"));
+const CustomerPaymentMethods = lazy(() => import("./pages/customer/CustomerPaymentMethods"));
+const CustomerSettings = lazy(() => import("./pages/customer/CustomerSettings"));
 
 // ===========================
 // Admin Layout
 // ===========================
-import AdminLayout from "./layouts/AdminLayout";
+const AdminLayout = lazy(() => import("./layouts/AdminLayout"));
 
 // ===========================
 // Admin Dashboard
 // ===========================
-import AdminDashboard from "./pages/admin/Dashboard";
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 
 // ===========================
 // Admin Product Pages
 // ===========================
-import Products from "./pages/admin/Products";
-import CreateProduct from "./pages/admin/CreateProduct";
-import EditProduct from "./pages/admin/EditProduct";
+const Products = lazy(() => import("./pages/admin/Products"));
+const CreateProduct = lazy(() => import("./pages/admin/CreateProduct"));
+const EditProduct = lazy(() => import("./pages/admin/EditProduct"));
 
 // ===========================
 // Admin Category Pages
 // ===========================
-import Categories from "./pages/admin/Categories";
-import CreateCategory from "./pages/admin/CreateCategory";
-import EditCategory from "./pages/admin/EditCategory";
+const Categories = lazy(() => import("./pages/admin/Categories"));
+const CreateCategory = lazy(() => import("./pages/admin/CreateCategory"));
+const EditCategory = lazy(() => import("./pages/admin/EditCategory"));
 
 // ===========================
 // Admin Brand Pages
 // ===========================
-import Brands from "./pages/admin/Brands";
-import CreateBrand from "./pages/admin/CreateBrand";
-import EditBrand from "./pages/admin/EditBrand";
+const Brands = lazy(() => import("./pages/admin/Brands"));
+const CreateBrand = lazy(() => import("./pages/admin/CreateBrand"));
+const EditBrand = lazy(() => import("./pages/admin/EditBrand"));
 
 // ===========================
 // Other Admin Pages
 // ===========================
-import Orders from "./pages/admin/Orders";
-import Customers from "./pages/admin/Customers";
-import Reviews from "./pages/admin/Reviews";
-import Settings from "./pages/admin/Settings";
+const Orders = lazy(() => import("./pages/admin/Orders"));
+const Customers = lazy(() => import("./pages/admin/Customers"));
+const Reviews = lazy(() => import("./pages/admin/Reviews"));
+const Settings = lazy(() => import("./pages/admin/Settings"));
 
 // ===========================
 // Protected Route
 // ===========================
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+// ── Loading Fallback ──
+const PageLoader = () => (
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100vh",
+      fontSize: "1.25rem",
+      color: "#6366f1",
+    }}
+  >
+    Loading…
+  </div>
+);
+
 function App() {
   return (
-    <Routes>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
       {/* ===========================
           Public Routes
       =========================== */}
@@ -73,6 +101,8 @@ function App() {
       <Route path="/login" element={<Login />} />
 
       <Route path="/register" element={<Register />} />
+
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Customer Store */}
       <Route path="/products" element={<ProductsPage />} />
@@ -91,6 +121,51 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard/orders"
+        element={
+          <ProtectedRoute>
+            <CustomerOrders />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard/wishlist"
+        element={
+          <ProtectedRoute>
+            <CustomerWishlist />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard/addresses"
+        element={
+          <ProtectedRoute>
+            <CustomerAddresses />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard/payment-methods"
+        element={
+          <ProtectedRoute>
+            <CustomerPaymentMethods />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/dashboard/settings"
+        element={
+          <ProtectedRoute>
+            <CustomerSettings />
           </ProtectedRoute>
         }
       />
@@ -219,6 +294,7 @@ function App() {
         />
       </Route>
     </Routes>
+    </Suspense>
   );
 }
 

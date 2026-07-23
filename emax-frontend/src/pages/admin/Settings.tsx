@@ -34,12 +34,11 @@ import {
   FaTimes,
   FaCheck,
   FaBoxOpen,
-  FaSyncAlt,
 } from "react-icons/fa";
 import "./Settings.css";
 import { shippingService } from "../../services/shippingService";
 import { storeSettingsService } from "../../services/storeSettingsService";
-import type { ShippingZone as ApiShippingZone, ShippingSettings as ApiShippingSettings } from "../../services/shippingService";
+import type { ShippingZone as ApiShippingZone } from "../../services/shippingService";
 
 // ── Types ──
 type TabId = "general" | "appearance" | "shipping" | "payment" | "notifications" | "seo";
@@ -218,7 +217,7 @@ const Settings = () => {
   }, []);
 
   // ── Fetch shipping zones & settings from DB on mount ──
-  const [loadingZones, setLoadingZones] = useState(false);
+  const [_loadingZones, setLoadingZones] = useState(false);
 
   const fetchShippingData = useCallback(async () => {
     try {

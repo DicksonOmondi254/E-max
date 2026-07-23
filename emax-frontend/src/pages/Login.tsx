@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaShieldAlt, FaTruck, FaUndo } from "react-icons/fa";
 
 import LoginForm from "../components/Auth/LoginForm";
 import { useStoreSettings } from "../hooks/useStoreSettings";
@@ -11,8 +12,16 @@ const Login = () => {
   return (
     <div className="auth-page">
       <div className="auth-container">
-        {/* Left Section */}
+        {/* Left Section - Brand */}
         <div className="auth-left">
+          {/* Decorative shapes */}
+          <div className="auth-shapes">
+            <div className="auth-shape" />
+            <div className="auth-shape" />
+            <div className="auth-shape" />
+            <div className="auth-shape" />
+          </div>
+
           <div className="auth-brand">
             {logo ? (
               <img
@@ -31,14 +40,36 @@ const Login = () => {
             </p>
           </div>
 
-          <img
-            src="/images/auth/login-banner.png"
-            alt="E-Max Login"
-            className="auth-image"
-          />
+          {/* Trust badges */}
+          <div className="auth-trust-badges">
+            <div className="auth-trust-item">
+              <span className="auth-trust-icon">
+                <FaShieldAlt />
+              </span>
+              <span className="auth-trust-text">
+                <strong>100% Authentic</strong> Products Guaranteed
+              </span>
+            </div>
+            <div className="auth-trust-item">
+              <span className="auth-trust-icon">
+                <FaTruck />
+              </span>
+              <span className="auth-trust-text">
+                <strong>Free Delivery</strong> on orders over KSh 5,000
+              </span>
+            </div>
+            <div className="auth-trust-item">
+              <span className="auth-trust-icon">
+                <FaUndo />
+              </span>
+              <span className="auth-trust-text">
+                <strong>14-Day Returns</strong> No questions asked
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Right Section */}
+        {/* Right Section - Form */}
         <div className="auth-right">
           <h2>Welcome Back</h2>
 

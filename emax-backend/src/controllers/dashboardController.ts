@@ -197,6 +197,7 @@ export const getMyRecentOrders = async (
           firstItem?.product?.name || "Order Item",
         status: o.status,
         total: o.totalAmount,
+        orderDate: o.createdAt.toISOString(),
       };
     });
 
@@ -248,6 +249,10 @@ export const getMyWishlist = async (
     const mapped = (wishlist?.items || []).map((wi) => ({
       id: wi.id,
       name: wi.product.name,
+      price: wi.product.price,
+      brand: wi.product.brand?.name || null,
+      image: wi.product.images?.[0]?.image || null,
+      slug: wi.product.slug,
     }));
 
     res.status(200).json({

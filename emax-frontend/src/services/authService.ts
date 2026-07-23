@@ -70,6 +70,54 @@ export const authService = {
     return result;
   },
 
+  async forgotPassword(email: string) {
+    const response = await fetch(`${API_URL}/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    let result: any;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error("Unable to read server response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to process request.");
+    }
+
+    return result;
+  },
+
+  async resetPassword(token: string, password: string) {
+    const response = await fetch(`${API_URL}/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, password }),
+    });
+
+    let result: any;
+
+    try {
+      result = await response.json();
+    } catch {
+      throw new Error("Unable to read server response.");
+    }
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to reset password.");
+    }
+
+    return result;
+  },
+
   logout() {
     localStorage.removeItem("token");
   },

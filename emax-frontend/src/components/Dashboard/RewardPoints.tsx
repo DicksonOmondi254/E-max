@@ -1,45 +1,64 @@
 import { useEffect, useState } from "react";
+import { FaCoins, FaGift } from "react-icons/fa";
+import { customerDashboardService } from "../../services/dashboardCustomerService";
 
 const RewardPoints = () => {
-  const [points, setPoints] = useState<number | null>(null);
+  const [points, setPoints] = useState<number>(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(
-          "http://localhost:5000/api/dashboard/me/overview",
-          {
-            headers: {
-              Authorization: token ? `Bearer ${token}` : "",
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error("Failed to load reward points");
-        }
-
-        const json = await res.json();
-        setPoints(json.data?.rewardPoints ?? 0);
+        const data = await customerDashboardService.getOverview();
+        setPoints(data.rewardPoints);
       } catch {
         setPoints(0);
       } finally {
         setLoading(false);
       }
     };
-
     load();
   }, []);
 
+  const nextTier = 5000;
+  const progress = Math.min((points / nextTier) * 100, 100);
+
   return (
     <div className="dashboard-card">
-      <h2>Reward Points</h2>
+      <div className="card-header">
+        <div className="card-header-left">
+          <FaCoins className="card-icon" style={{ color: "#f59e0b" }} />
+          <h2>Reward Points</h2>
+        </div>
+      </div>
 
-      {loading ? <p>Loading...</p> : <h1>{points?.toLocaleString()}</h1>}
+      {loading ? (
+        <div className="card-skeleton">
+          <div className="skeleton-line" />
+          <div className="skeleton-line" />
+        </div>
+      ) : (
+        <div className="reward-content">
+          <p className="reward-points-value">
+            {points.toLocaleString()}
+          </p>
+          <p className="reward-label">Earned Points</p>
 
-      <p>You can redeem these points on your next purchase.</p>
+          <div className="reward-progress">
+            <div
+              className="reward-progress-fill"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          <p className="reward-next">
+            <FaGift style={{ marginRight: 4, verticalAlign: "middle" }} />
+            {points >= nextTier
+              ? "You've unlocked Gold Tier! 🎉"
+              : `${(nextTier - points).toLocaleString()} points to Gold Tier`}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,67 +1,85 @@
 import { useEffect, useState } from "react";
+import { FaShoppingBag, FaHeart, FaTicketAlt, FaCoins } from "react-icons/fa";
+import { customerDashboardService, type CustomerDashboardStats } from "../../services/dashboardCustomerService";
 
 const DashboardOverview = () => {
-  const [ordersCount, setOrdersCount] = useState<number>(0);
-  const [wishlistCount, setWishlistCount] = useState<number>(0);
-  const [rewardPoints, setRewardPoints] = useState<number>(0);
+  const [stats, setStats] = useState<CustomerDashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(
-          "http://localhost:5000/api/dashboard/me/overview",
-          {
-            headers: {
-              Authorization: token ? `Bearer ${token}` : "",
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error("Failed to load dashboard overview");
-        }
-
-        const json = await res.json();
-        setOrdersCount(json.data?.ordersCount ?? 0);
-        setWishlistCount(json.data?.wishlistCount ?? 0);
-        setRewardPoints(json.data?.rewardPoints ?? 0);
+        const data = await customerDashboardService.getOverview();
+        setStats(data);
       } catch {
-        setOrdersCount(0);
-        setWishlistCount(0);
-        setRewardPoints(0);
+        setStats(null);
       } finally {
         setLoading(false);
       }
     };
-
     load();
   }, []);
 
+  const cards = [
+    {
+      label: "Total Orders",
+      value: stats?.ordersCount ?? 0,
+      icon: FaShoppingBag,
+      className: "stat-card--orders",
+      change: "+12%",
+      changeType: "positive",
+    },
+    {
+      label: "Wishlist Items",
+      value: stats?.wishlistCount ?? 0,
+      icon: FaHeart,
+      className: "stat-card--wishlist",
+      change: "+5%",
+      changeType: "positive",
+    },
+    {
+      label: "Coupons",
+      value: 0,
+      icon: FaTicketAlt,
+      className: "stat-card--coupons",
+      change: "New",
+      changeType: "positive",
+    },
+    {
+      label: "Reward Points",
+      value: stats?.rewardPoints?.toLocaleString() ?? "0",
+      icon: FaCoins,
+      className: "stat-card--rewards",
+      change: "Earn more",
+      changeType: "positive",
+    },
+  ];
+
   return (
     <div className="dashboard-grid">
-      <div className="dashboard-card">
-        <h3>Orders</h3>
-        <h1>{loading ? "..." : ordersCount}</h1>
-      </div>
-
-      <div className="dashboard-card">
-        <h3>Wishlist</h3>
-        <h1>{loading ? "..." : wishlistCount}</h1>
-      </div>
-
-      <div className="dashboard-card">
-        <h3>Coupons</h3>
-        <h1>0</h1>
-      </div>
-
-      <div className="dashboard-card">
-        <h3>Reward Points</h3>
-        <h1>{loading ? "..." : rewardPoints.toLocaleString()}</h1>
-      </div>
+      {cards.map((card) => (
+        <div key={card.label} className={`stat-card ${card.className}`}>
+          <div className="stat-card-header">
+            <span className="stat-card-icon">
+              <card.icon />
+            </span>
+          </div>
+          <p className="stat-card-label">{card.label}</p>
+          <h1 className="stat-card-value">
+            {loading ? (
+              <span style={{ fontSize: 24, color: "#cbd5e1" }}>...</span>
+            ) : (
+              card.value
+            )}
+          </h1>
+          <span className={`stat-card-change ${card.changeType}`}>
+            {card.change}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default DashboardOverview;
+

@@ -52,6 +52,7 @@ export interface SingleOrderResponse {
 }
 
 export const orderService = {
+  /** Get all orders (admin only) */
   async getAllOrders(): Promise<OrdersResponse> {
     const response = await fetch(API_BASE, {
       headers: getAuthHeaders(),
@@ -61,6 +62,21 @@ export const orderService = {
 
     if (!response.ok) {
       throw new Error(result.message || "Failed to fetch orders.");
+    }
+
+    return result;
+  },
+
+  /** Get current user's orders (customer) */
+  async getMyOrders(): Promise<OrdersResponse> {
+    const response = await fetch(`${API_BASE}/my-orders`, {
+      headers: getAuthHeaders(),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to fetch your orders.");
     }
 
     return result;
