@@ -1,6 +1,6 @@
 import "./Navbar.css";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import Logo from "../Logo/Logo";
@@ -11,8 +11,17 @@ import WishlistIcon from "../Wishlist/WishlistIcon";
 import NotificationBell from "../Notifications/NotificationBell";
 import UserMenu from "./UserMenu";
 
+import { useAppDispatch } from "../../redux/hooks";
+import { restoreCart } from "../../redux/cartSlice";
+
 const Navbar = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const dispatch = useAppDispatch();
+
+  // Load the user's cart on mount (uses userId from localStorage)
+  useEffect(() => {
+    dispatch(restoreCart(undefined));
+  }, [dispatch]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMyWishlist = exports.getMyRecentOrders = exports.getMyDashboardOverview = exports.getDashboardStats = void 0;
+exports.getDashboardStats = void 0;
 const prisma_1 = require("../config/prisma");
 const getDashboardStats = async (req, res) => {
     try {
@@ -90,136 +90,7 @@ const getDashboardStats = async (req, res) => {
     }
 };
 exports.getDashboardStats = getDashboardStats;
-// =====================================================
-// Customer Dashboard (real data from DB)
-// =====================================================
-const getMyDashboardOverview = async (req, res) => {
-    try {
-        const userId = req.user?.id;
-        if (!userId) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized.",
-            });
-        }
-        const [ordersCount, wishlistCount] = await Promise.all([
-            prisma_1.prisma.order.count({ where: { userId } }),
-            prisma_1.prisma.wishlist.count({ where: { userId } }),
-        ]);
-        // No reward points/coupons model exists in schema yet.
-        // Keep UI stable by returning a realistic derived placeholder.
-        // (Derived from delivered orders total, rounded.)
-        const deliveredOrdersTotal = await prisma_1.prisma.order.aggregate({
-            _sum: { totalAmount: true },
-            where: { userId, status: "DELIVERED" },
-        });
-        const totalAmount = deliveredOrdersTotal._sum.totalAmount || 0;
-        const rewardPoints = Math.round(totalAmount / 100); // 1 point per 100 KES (derived)
-        res.status(200).json({
-            success: true,
-            data: {
-                ordersCount,
-                wishlistCount,
-                rewardPoints,
-            },
-        });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Failed to load customer dashboard overview.",
-        });
-    }
-};
-exports.getMyDashboardOverview = getMyDashboardOverview;
-const getMyRecentOrders = async (req, res) => {
-    try {
-        const userId = req.user?.id;
-        if (!userId) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized.",
-            });
-        }
-        const orders = await prisma_1.prisma.order.findMany({
-            where: { userId },
-            orderBy: { createdAt: "desc" },
-            take: 5,
-            include: {
-                items: {
-                    include: {
-                        product: {
-                            include: { brand: true },
-                        },
-                    },
-                },
-            },
-        });
-        // Convert to the shape the existing UI expects.
-        const mapped = orders.map((o) => {
-            const firstItem = o.items[0];
-            return {
-                id: o.orderNumber,
-                product: firstItem?.product?.name || "Order Item",
-                status: o.status,
-                total: o.totalAmount,
-            };
-        });
-        res.status(200).json({
-            success: true,
-            data: mapped,
-        });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Failed to load recent orders.",
-        });
-    }
-};
-exports.getMyRecentOrders = getMyRecentOrders;
-const getMyWishlist = async (req, res) => {
-    try {
-        const userId = req.user?.id;
-        if (!userId) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized.",
-            });
-        }
-        const wishlist = await prisma_1.prisma.wishlist.findUnique({
-            where: { userId },
-            include: {
-                items: {
-                    include: {
-                        product: {
-                            include: {
-                                brand: true,
-                                category: true,
-                                images: true,
-                            },
-                        },
-                    },
-                },
-            },
-        });
-        const mapped = (wishlist?.items || []).map((wi) => ({
-            id: wi.id,
-            name: wi.product.name,
-        }));
-        res.status(200).json({
-            success: true,
-            data: mapped,
-        });
-    }
-    catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "Failed to load wishlist.",
-        });
-    }
-};
-exports.getMyWishlist = getMyWishlist;
+// NOTE: Customer dashboard endpoints have been moved to
+// routes/dashboardCustomerRoutes.ts and controllers/customerDashboardController.ts
+// to enforce strict multi-tenant isolation with role-based access.
+// Only CUSTOMER role users can access those endpoints.

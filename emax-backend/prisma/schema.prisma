@@ -42,10 +42,17 @@ model User {
   resetToken       String?
   resetTokenExpiry DateTime?
 
-  reviews ProductReview[]
-  orders  Order[]
-  cart Cart?
-wishlist Wishlist?
+  // User preferences
+  notifications String  @default("{\"orderUpdates\":true,\"promotions\":true,\"newsletter\":false,\"paymentAlerts\":true,\"wishlistAlerts\":false}")
+  language      String  @default("en")
+  currency      String  @default("KES")
+  timezone      String  @default("Africa/Nairobi")
+
+  reviews  ProductReview[]
+  orders   Order[]
+  cart     Cart?
+  wishlist Wishlist?
+  addresses CustomerAddress[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -268,6 +275,63 @@ model ShippingSettings {
   updatedAt DateTime @updatedAt
 }
 
+model CustomerAddress {
+  id        Int      @id @default(autoincrement())
+  label     String   @default("Home")
+  firstName String
+  lastName  String
+  phone     String
+  county    String
+  town      String
+  address   String
+  landmark  String?
+  isDefault Boolean  @default(false)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("customer_addresses")
+}
+
+enum CouponDiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model Coupon {
+  id             Int                @id @default(autoincrement())
+  code           String             @unique
+  description    String?
+  discountType   CouponDiscountType @default(PERCENTAGE)
+  discountValue  Float
+  minOrderAmount Float              @default(0)
+  maxUsage       Int                @default(100)
+  usedCount      Int                @default(0)
+  expiresAt      DateTime?
+  isActive       Boolean            @default(true)
+
+  users UserCoupon[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserCoupon {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  couponId Int
+  usedAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, couponId])
+  @@map("user_coupons")
+}
+
 model StoreSettings {
   id              Int    @id @default(autoincrement())
   
@@ -282,11 +346,34 @@ model StoreSettings {
 
   // Appearance
   logo            String @default("")
+  favicon         String @default("")
   primaryColor    String @default("#6366f1")
   secondaryColor  String @default("#8b5cf6")
   accentColor     String @default("#f59e0b")
   backgroundColor String @default("#f5f6fa")
   darkMode        Boolean @default(false)
+
+  // Social Media
+  facebookUrl     String @default("")
+  twitterUrl      String @default("")
+  instagramUrl    String @default("")
+  tiktokUrl       String @default("")
+  youtubeUrl      String @default("")
+  linkedinUrl     String @default("")
+
+  // Custom Code
+  customCss       String @default("")
+  customJs        String @default("")
+  customHeader    String @default("")
+  customFooter    String @default("")
+
+  // Email SMTP
+  smtpHost        String @default("")
+  smtpPort        Int    @default(587)
+  smtpUser        String @default("")
+  smtpPass        String @default("")
+  smtpFromEmail   String @default("")
+  smtpFromName    String @default("")
 
   // Payment - stored as JSON string
   paymentMethods  String @default("[]")

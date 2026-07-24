@@ -19,6 +19,7 @@ import {
   loginStart,
   loginSuccess,
 } from "../../redux/authSlice";
+import { restoreCart } from "../../redux/cartSlice";
 
 interface FormData {
   email: string;
@@ -118,6 +119,14 @@ const LoginForm = () => {
           token: response.token,
         })
       );
+
+      // Load the user's specific cart from localStorage
+      dispatch(restoreCart(response.user.id));
+
+      // Migrate any guest cart items to this user's cart
+      // (guest items will be merged into user-specific key)
+      const { cartService } = await import("../../services/cartService");
+      cartService.migrateGuestCartToUser(response.user.id);
 
       switch (response.user.role) {
         case "ADMIN":

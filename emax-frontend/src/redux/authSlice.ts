@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { cartService } from "../services/cartService";
 
 export interface User {
   id: number;
@@ -64,6 +65,14 @@ const authSlice = createSlice({
     },
 
     logout: (state) => {
+      // Save cart to user-specific key before clearing
+      const userId = state.user?.id;
+      if (userId) {
+        // Cart data is already saved per-user by cartSlice's save()
+        // Clear the user's cart localStorage
+        cartService.clearCart(userId);
+      }
+
       state.user = null;
 
       state.isAuthenticated = false;

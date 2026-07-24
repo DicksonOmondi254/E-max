@@ -9,11 +9,28 @@ export interface StoreSettingsData {
   currency?: string;
   timezone?: string;
   logo?: string;
+  favicon?: string;
   primaryColor?: string;
   secondaryColor?: string;
   accentColor?: string;
   backgroundColor?: string;
   darkMode?: boolean;
+  facebookUrl?: string;
+  twitterUrl?: string;
+  instagramUrl?: string;
+  tiktokUrl?: string;
+  youtubeUrl?: string;
+  linkedinUrl?: string;
+  customCss?: string;
+  customJs?: string;
+  customHeader?: string;
+  customFooter?: string;
+  smtpHost?: string;
+  smtpPort?: number;
+  smtpUser?: string;
+  smtpPass?: string;
+  smtpFromEmail?: string;
+  smtpFromName?: string;
   paymentMethods?: string;
   notifications?: string;
   metaTitle?: string;
@@ -31,11 +48,28 @@ const DEFAULT_SETTINGS = {
   currency: "KES",
   timezone: "Africa/Nairobi",
   logo: "",
+  favicon: "",
   primaryColor: "#6366f1",
   secondaryColor: "#8b5cf6",
   accentColor: "#f59e0b",
   backgroundColor: "#f5f6fa",
   darkMode: false,
+  facebookUrl: "",
+  twitterUrl: "",
+  instagramUrl: "",
+  tiktokUrl: "",
+  youtubeUrl: "",
+  linkedinUrl: "",
+  customCss: "",
+  customJs: "",
+  customHeader: "",
+  customFooter: "",
+  smtpHost: "",
+  smtpPort: 587,
+  smtpUser: "",
+  smtpPass: "",
+  smtpFromEmail: "",
+  smtpFromName: "",
   paymentMethods: JSON.stringify([
     { id: "mpesa", name: "M-Pesa", description: "Mobile money via Safaricom", enabled: true, type: "mpesa" },
     { id: "card", name: "Credit / Debit Card", description: "Visa, Mastercard, etc.", enabled: true, type: "card" },

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/dashboard/me";
+const API_URL = "http://localhost:5000/api/dashboard/customer";
 
 const getToken = () => localStorage.getItem("token");
 
@@ -16,7 +16,15 @@ const getHeaders = (): HeadersInit => {
 export interface CustomerDashboardStats {
   ordersCount: number;
   wishlistCount: number;
+  couponsCount: number;
   rewardPoints: number;
+}
+
+export interface CustomerNotification {
+  id: number;
+  type: "info" | "success" | "warning" | "error";
+  message: string;
+  time: string;
 }
 
 export interface CustomerRecentOrder {
@@ -35,6 +43,8 @@ export interface CustomerWishlistItem {
   image?: string | null;
   price?: number | null;
   slug?: string | null;
+  stock?: number | null;
+  productId?: number | null;
 }
 
 export const customerDashboardService = {
@@ -61,6 +71,15 @@ export const customerDashboardService = {
       headers: getHeaders(),
     });
     if (!response.ok) throw new Error("Failed to load wishlist");
+    const result = await response.json();
+    return result.data || [];
+  },
+
+  async getNotifications(): Promise<CustomerNotification[]> {
+    const response = await fetch(`${API_URL}/notifications`, {
+      headers: getHeaders(),
+    });
+    if (!response.ok) throw new Error("Failed to load notifications");
     const result = await response.json();
     return result.data || [];
   },

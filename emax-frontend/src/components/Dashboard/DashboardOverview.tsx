@@ -39,10 +39,10 @@ const DashboardOverview = () => {
     },
     {
       label: "Coupons",
-      value: 0,
+      value: stats?.couponsCount ?? 0,
       icon: FaTicketAlt,
       className: "stat-card--coupons",
-      change: "New",
+      change: "Available",
       changeType: "positive",
     },
     {

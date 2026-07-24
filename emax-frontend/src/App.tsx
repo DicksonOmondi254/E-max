@@ -119,7 +119,7 @@ function App() {
       <Route
         path="/dashboard"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <Dashboard />
           </ProtectedRoute>
         }
@@ -128,7 +128,7 @@ function App() {
       <Route
         path="/dashboard/orders"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <CustomerOrders />
           </ProtectedRoute>
         }
@@ -137,7 +137,7 @@ function App() {
       <Route
         path="/dashboard/wishlist"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <CustomerWishlist />
           </ProtectedRoute>
         }
@@ -146,7 +146,7 @@ function App() {
       <Route
         path="/dashboard/addresses"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <CustomerAddresses />
           </ProtectedRoute>
         }
@@ -155,7 +155,7 @@ function App() {
       <Route
         path="/dashboard/payment-methods"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <CustomerPaymentMethods />
           </ProtectedRoute>
         }
@@ -164,7 +164,7 @@ function App() {
       <Route
         path="/dashboard/settings"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <CustomerSettings />
           </ProtectedRoute>
         }
@@ -173,7 +173,7 @@ function App() {
       <Route
         path="/checkout"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <Checkout />
           </ProtectedRoute>
         }
@@ -182,7 +182,7 @@ function App() {
       <Route
         path="/payment"
         element={
-          <ProtectedRoute>
+          <ProtectedRoute roles={["CUSTOMER"]}>
             <Payment />
           </ProtectedRoute>
         }
@@ -195,7 +195,7 @@ function App() {
 <Route
   path="/cart"
   element={
-    <ProtectedRoute>
+    <ProtectedRoute roles={["CUSTOMER"]}>
       <Cart />
     </ProtectedRoute>
   }

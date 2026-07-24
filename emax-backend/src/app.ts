@@ -22,7 +22,9 @@ import reviewRoutes from "./routes/reviewRoutes";
 import wishlistRoutes from "./routes/wishlistRoutes";
 import customerRoutes from "./routes/customerRoutes";
 import shippingRoutes from "./routes/shippingRoutes";
+import addressRoutes from "./routes/addressRoutes";
 import storeSettingsRoutes from "./routes/storeSettingsRoutes";
+import profileRoutes from "./routes/profileRoutes";
 
 dotenv.config();
 
@@ -100,8 +102,14 @@ app.use("/api/admin/customers", customerRoutes);
 // Shipping
 app.use("/api/shipping", shippingRoutes);
 
+// Addresses
+app.use("/api/addresses", addressRoutes);
+
 // Store Settings
 app.use("/api/store-settings", storeSettingsRoutes);
+
+// Customer Profile
+app.use("/api/profile", profileRoutes);
 
 /*
 Future Routes

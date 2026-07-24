@@ -1,10 +1,18 @@
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import "./ProductCard.css";
 
 import type { Product as ApiProduct } from "../../types/product";
 
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart } from "../../redux/cartSlice";
+import {
+  addToWishlist,
+  removeFromWishlist,
+  fetchWishlist,
+  selectIsInWishlist,
+} from "../../redux/wishlistSlice";
 
 // Full API-backed product (used around the app)
 export type Product = Omit<ApiProduct, "active"> & { active?: boolean };
@@ -30,6 +38,17 @@ const FALLBACK_IMAGE = "/images/no-image.svg";
 
 const ProductCard = ({ product }: ProductCardProps) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isInWishlist = useAppSelector(selectIsInWishlist(product.id));
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  // Load wishlist on mount if token exists
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchWishlist());
+    }
+  }, [dispatch]);
 
   const thumb = "thumbnail" in product ? product.thumbnail : undefined;
   const img = "image" in product ? product.image : undefined;
@@ -56,6 +75,33 @@ const ProductCard = ({ product }: ProductCardProps) => {
     );
   };
 
+  const handleToggleWishlist = useCallback(
+    async (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      setWishlistLoading(true);
+      try {
+        if (isInWishlist) {
+          await dispatch(removeFromWishlist(product.id)).unwrap();
+        } else {
+          await dispatch(addToWishlist(product.id)).unwrap();
+        }
+      } catch (err) {
+        console.error("Wishlist toggle error:", err);
+      } finally {
+        setWishlistLoading(false);
+      }
+    },
+    [dispatch, isInWishlist, product.id, navigate]
+  );
+
   return (
     <div className="product-card">
       {featured && (
@@ -63,6 +109,17 @@ const ProductCard = ({ product }: ProductCardProps) => {
           ⭐ Featured
         </span>
       )}
+
+      {/* Wishlist Toggle Button */}
+      <button
+        className={`wishlist-toggle-btn ${isInWishlist ? "in-wishlist" : ""}`}
+        onClick={handleToggleWishlist}
+        disabled={wishlistLoading}
+        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+        title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+      >
+        {isInWishlist ? <FaHeart /> : <FaRegHeart />}
+      </button>
 
       <Link to={`/products/${slugOrId}`} className="product-image">
         <img src={image} alt={product.name} loading="lazy" />

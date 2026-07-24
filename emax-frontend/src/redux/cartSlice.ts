@@ -21,13 +21,30 @@ interface CartState {
 }
 
 const initialState: CartState = {
-  items: cartService.loadCart(),
+  items: [],
   shipping: 0,
   discount: 0,
 };
 
+/**
+ * Get current userId from Redux auth state or localStorage.
+ */
+const getUserId = (): number | undefined => {
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      return user.id;
+    }
+  } catch {
+    // ignore
+  }
+  return undefined;
+};
+
 const save = (items: CartItem[]) => {
-  cartService.saveCart(items);
+  const userId = getUserId();
+  cartService.saveCart(items, userId);
 };
 
 const cartSlice = createSlice({
@@ -36,8 +53,9 @@ const cartSlice = createSlice({
   initialState,
 
   reducers: {
-    restoreCart(state) {
-      state.items = cartService.loadCart();
+    restoreCart(state, action: PayloadAction<number | undefined>) {
+      const userId = action.payload ?? getUserId();
+      state.items = cartService.loadCart(userId);
     },
 
     addToCart(

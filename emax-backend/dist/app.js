@@ -25,7 +25,9 @@ const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
 const wishlistRoutes_1 = __importDefault(require("./routes/wishlistRoutes"));
 const customerRoutes_1 = __importDefault(require("./routes/customerRoutes"));
 const shippingRoutes_1 = __importDefault(require("./routes/shippingRoutes"));
+const addressRoutes_1 = __importDefault(require("./routes/addressRoutes"));
 const storeSettingsRoutes_1 = __importDefault(require("./routes/storeSettingsRoutes"));
+const profileRoutes_1 = __importDefault(require("./routes/profileRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 /* ===========================================
@@ -77,8 +79,12 @@ app.use("/api/wishlist", wishlistRoutes_1.default);
 app.use("/api/admin/customers", customerRoutes_1.default);
 // Shipping
 app.use("/api/shipping", shippingRoutes_1.default);
+// Addresses
+app.use("/api/addresses", addressRoutes_1.default);
 // Store Settings
 app.use("/api/store-settings", storeSettingsRoutes_1.default);
+// Customer Profile
+app.use("/api/profile", profileRoutes_1.default);
 /*
 Future Routes
 
