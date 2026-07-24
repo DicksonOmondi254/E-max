@@ -24,7 +24,7 @@ exports.profileController = {
                     phone: true,
                     role: true,
                     isVerified: true,
-                    notifications: true,
+                    notificationPrefs: true,
                     language: true,
                     currency: true,
                     timezone: true,
@@ -95,7 +95,7 @@ exports.profileController = {
                 updateData.phone = phone;
             }
             if (notifications !== undefined)
-                updateData.notifications = notifications;
+                updateData.notificationPrefs = notifications;
             if (language !== undefined)
                 updateData.language = language;
             if (currency !== undefined)

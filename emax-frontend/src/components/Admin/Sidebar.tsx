@@ -9,6 +9,7 @@ import {
   FaUsers,
   FaStar,
   FaCog,
+  FaBell,
 } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -52,6 +53,11 @@ const Sidebar = () => {
         <NavLink to="/admin/reviews">
           <FaStar />
           Reviews
+        </NavLink>
+
+        <NavLink to="/admin/notifications">
+          <FaBell />
+          Notifications
         </NavLink>
 
         <NavLink to="/admin/settings">

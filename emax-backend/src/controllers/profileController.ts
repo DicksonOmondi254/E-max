@@ -24,7 +24,7 @@ export const profileController = {
           phone: true,
           role: true,
           isVerified: true,
-          notifications: true,
+          notificationPrefs: true,
           language: true,
           currency: true,
           timezone: true,
@@ -96,7 +96,7 @@ export const profileController = {
         }
         updateData.phone = phone;
       }
-      if (notifications !== undefined) updateData.notifications = notifications;
+      if (notifications !== undefined) updateData.notificationPrefs = notifications;
       if (language !== undefined) updateData.language = language;
       if (currency !== undefined) updateData.currency = currency;
       if (timezone !== undefined) updateData.timezone = timezone;

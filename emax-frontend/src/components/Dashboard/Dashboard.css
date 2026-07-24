@@ -2134,6 +2134,36 @@
 
 .wishlist-skel-btn--secondary { flex: 0.4; }
 
+/* ── View More / View Less Button ── */
+.wishlist-view-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+.wishlist-view-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  color: #6366f1;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.wishlist-view-more-btn:hover {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.03));
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
+  transform: translateY(-2px);
+}
+
 @media (max-width: 1200px) {
   .wishlist-grid-full, .wishlist-skel-grid { grid-template-columns: repeat(2, 1fr); }
 }

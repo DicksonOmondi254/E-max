@@ -44,6 +44,10 @@ const CustomerWishlist = () => {
   const [removingId, setRemovingId] = useState<number | null>(null);
   const [addingToCartId, setAddingToCartId] = useState<number | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [showAllItems, setShowAllItems] = useState(false);
+
+  const INITIAL_DISPLAY_COUNT = 1;
+  const displayedItems = showAllItems ? items : items.slice(0, INITIAL_DISPLAY_COUNT);
 
   // ── Toast helper ──────────────────────────────────────
   const showToast = useCallback((message: string, type: ToastType = "success") => {
@@ -244,7 +248,7 @@ const CustomerWishlist = () => {
       {/* ── Wishlist Grid ───────────────────────── */}
       {!loading && !reduxError && items.length > 0 && (
         <div className="wishlist-grid-full">
-          {items.map((item, index) => (
+          {displayedItems.map((item, index) => (
             <div
               key={item.id}
               className="wishlist-card"
@@ -332,6 +336,22 @@ const CustomerWishlist = () => {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ── View More / View Less ──────────────── */}
+      {!loading && !reduxError && items.length > INITIAL_DISPLAY_COUNT && (
+        <div className="wishlist-view-more-wrap">
+          <button
+            className="wishlist-view-more-btn"
+            onClick={() => setShowAllItems(!showAllItems)}
+          >
+            {showAllItems ? (
+              <>Show Less</>
+            ) : (
+              <>View More ({items.length - INITIAL_DISPLAY_COUNT} more)</>
+            )}
+          </button>
         </div>
       )}
     </CustomerShell>

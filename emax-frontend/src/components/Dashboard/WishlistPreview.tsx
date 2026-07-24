@@ -46,33 +46,52 @@ const WishlistPreview = () => {
             Explore Products
           </Link>
         </div>
-      ) : (
-        <div className="wishlist-grid">
-          {items.slice(0, 4).map((item) => (
+) : (
+        <>
+          <div className="wishlist-grid">
+            {items.slice(0, 1).map((item) => (
+              <Link
+                to={`/products/${item.slug || ""}`}
+                key={item.id}
+                className="wishlist-item"
+                style={{ textDecoration: "none" }}
+              >
+                <img
+                  src={
+                    item.image
+                      ? `http://localhost:5000/uploads/products/${item.image}`
+                      : "/images/no-image.svg"
+                  }
+                  alt={item.name}
+                  className="wishlist-item-img"
+                />
+                <div className="wishlist-item-info">
+                  <p className="wishlist-item-name">{item.name}</p>
+                  {item.brand && (
+                    <p className="wishlist-item-brand">{item.brand}</p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+          {items.length > 1 && (
             <Link
-              to={`/products/${item.slug || ""}`}
-              key={item.id}
-              className="wishlist-item"
-              style={{ textDecoration: "none" }}
+              to="/dashboard/wishlist"
+              className="view-all"
+              style={{
+                display: "block",
+                textAlign: "center",
+                marginTop: 12,
+                fontSize: 13,
+                fontWeight: 600,
+                color: "#6366f1",
+                textDecoration: "none",
+              }}
             >
-              <img
-                src={
-                  item.image
-                    ? `http://localhost:5000/uploads/products/${item.image}`
-                    : "/images/no-image.svg"
-                }
-                alt={item.name}
-                className="wishlist-item-img"
-              />
-              <div className="wishlist-item-info">
-                <p className="wishlist-item-name">{item.name}</p>
-                {item.brand && (
-                  <p className="wishlist-item-brand">{item.brand}</p>
-                )}
-              </div>
+              View More ({items.length - 1} more)
             </Link>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   );

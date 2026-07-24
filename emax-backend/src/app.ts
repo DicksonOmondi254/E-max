@@ -25,6 +25,7 @@ import shippingRoutes from "./routes/shippingRoutes";
 import addressRoutes from "./routes/addressRoutes";
 import storeSettingsRoutes from "./routes/storeSettingsRoutes";
 import profileRoutes from "./routes/profileRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
 
 dotenv.config();
 
@@ -110,6 +111,9 @@ app.use("/api/store-settings", storeSettingsRoutes);
 
 // Customer Profile
 app.use("/api/profile", profileRoutes);
+
+// Notifications (admin create + user receive)
+app.use("/api/notifications", notificationRoutes);
 
 /*
 Future Routes

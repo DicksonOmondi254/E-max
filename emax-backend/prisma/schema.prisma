@@ -43,16 +43,19 @@ model User {
   resetTokenExpiry DateTime?
 
   // User preferences
-  notifications String  @default("{\"orderUpdates\":true,\"promotions\":true,\"newsletter\":false,\"paymentAlerts\":true,\"wishlistAlerts\":false}")
-  language      String  @default("en")
-  currency      String  @default("KES")
-  timezone      String  @default("Africa/Nairobi")
+  notificationPrefs String  @default("{\"orderUpdates\":true,\"promotions\":true,\"newsletter\":false,\"paymentAlerts\":true,\"wishlistAlerts\":false}")
+  language          String  @default("en")
+  currency          String  @default("KES")
+  timezone          String  @default("Africa/Nairobi")
 
   reviews  ProductReview[]
   orders   Order[]
   cart     Cart?
   wishlist Wishlist?
   addresses CustomerAddress[]
+  notifications UserNotification[]
+  createdNotifications Notification[] @relation("CreatedNotifications")
+  coupons UserCoupon[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -330,6 +333,50 @@ model UserCoupon {
 
   @@unique([userId, couponId])
   @@map("user_coupons")
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  SUCCESS
+  ERROR
+}
+
+enum NotificationTarget {
+  ALL
+  CUSTOMER
+  SELLER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Notification {
+  id          Int               @id @default(autoincrement())
+  title       String
+  message     String
+  type        NotificationType  @default(INFO)
+  target      NotificationTarget @default(ALL)
+  createdById Int
+  createdBy   User              @relation("CreatedNotifications", fields: [createdById], references: [id])
+
+  users UserNotification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserNotification {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  notificationId Int
+  isRead         Boolean      @default(false)
+  readAt         DateTime?
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, notificationId])
+  @@map("user_notifications")
 }
 
 model StoreSettings {

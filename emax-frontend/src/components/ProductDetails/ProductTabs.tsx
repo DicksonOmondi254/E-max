@@ -2,37 +2,48 @@ import { useState } from "react";
 import Specifications from "./Specifications";
 import Reviews from "./Reviews";
 
-const ProductTabs = () => {
+interface ProductTabsProps {
+  productId: number;
+  description: string;
+}
 
-  const [tab, setTab] = useState("description");
+const ProductTabs = ({ productId, description }: ProductTabsProps) => {
+
+  const [tab, setTab] = useState("reviews");
 
   return (
     <section className="tabs">
 
-      <button onClick={() => setTab("description")}>
+      <button
+        className={tab === "description" ? "tab-active" : ""}
+        onClick={() => setTab("description")}
+      >
         Description
       </button>
 
-      <button onClick={() => setTab("specs")}>
+      <button
+        className={tab === "specs" ? "tab-active" : ""}
+        onClick={() => setTab("specs")}
+      >
         Specifications
       </button>
 
-      <button onClick={() => setTab("reviews")}>
+      <button
+        className={tab === "reviews" ? "tab-active" : ""}
+        onClick={() => setTab("reviews")}
+      >
         Reviews
       </button>
 
       <div className="tab-content">
 
         {tab === "description" && (
-          <p>
-            Genuine Apple product with official warranty,
-            secure payments, and nationwide delivery.
-          </p>
+          <p>{description}</p>
         )}
 
         {tab === "specs" && <Specifications />}
 
-        {tab === "reviews" && <Reviews />}
+        {tab === "reviews" && <Reviews productId={productId} />}
 
       </div>
 

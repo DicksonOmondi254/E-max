@@ -1,11 +1,7 @@
-import { FaBell } from "react-icons/fa";
+import NotificationsList from "./NotificationsList";
 
 const NotificationBell = () => {
-  return (
-    <button className="nav-icon">
-      <FaBell />
-    </button>
-  );
+  return <NotificationsList />;
 };
 
 export default NotificationBell;

@@ -66,11 +66,13 @@ const Orders = lazy(() => import("./pages/admin/Orders"));
 const Customers = lazy(() => import("./pages/admin/Customers"));
 const Reviews = lazy(() => import("./pages/admin/Reviews"));
 const Settings = lazy(() => import("./pages/admin/Settings"));
+const AdminNotifications = lazy(() => import("./pages/admin/Notifications"));
 
 // ===========================
-// Protected Route
+// Protected Route & Layouts
 // ===========================
 import ProtectedRoute from "./routes/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
 
 // ── Loading Fallback ──
 const PageLoader = () => (
@@ -93,7 +95,7 @@ function App() {
     <Suspense fallback={<PageLoader />}>
       <Routes>
       {/* ===========================
-          Public Routes
+          Public Routes (no Navbar - clean landing)
       =========================== */}
 
       <Route path="/" element={<Home />} />
@@ -112,94 +114,98 @@ function App() {
         element={<ProductDetails />}
       />
 
+      <Route
+        path="/products/:slug"
+        element={<ProductDetails />}
+      />
+
       {/* ===========================
-          Customer Routes
+          Customer Routes (with Navbar)
       =========================== */}
 
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Route element={<MainLayout />}>
 
-      <Route
-        path="/dashboard/orders"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <CustomerOrders />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/dashboard/wishlist"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <CustomerWishlist />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/dashboard/orders"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <CustomerOrders />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/dashboard/addresses"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <CustomerAddresses />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/dashboard/wishlist"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <CustomerWishlist />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/dashboard/payment-methods"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <CustomerPaymentMethods />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/dashboard/addresses"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <CustomerAddresses />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/dashboard/settings"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <CustomerSettings />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/dashboard/payment-methods"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <CustomerPaymentMethods />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/checkout"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <Checkout />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/dashboard/settings"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <CustomerSettings />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/payment"
-        element={
-          <ProtectedRoute roles={["CUSTOMER"]}>
-            <Payment />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-  path="/products/:slug"
-  element={<ProductDetails />}
-/>
-<Route
-  path="/cart"
-  element={
-    <ProtectedRoute roles={["CUSTOMER"]}>
-      <Cart />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <Payment />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute roles={["CUSTOMER"]}>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
 
       {/* ===========================
           Admin Routes
@@ -285,6 +291,12 @@ function App() {
         <Route
           path="reviews"
           element={<Reviews />}
+        />
+
+        {/* Notifications */}
+        <Route
+          path="notifications"
+          element={<AdminNotifications />}
         />
 
         {/* Settings */}

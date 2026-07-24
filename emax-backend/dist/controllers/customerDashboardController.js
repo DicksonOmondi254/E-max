@@ -201,7 +201,20 @@ const getMyNotifications = async (req, res) => {
                 message: "Unauthorized.",
             });
         }
-        const [recentOrders, wishlistItems, user] = await Promise.all([
+        const [adminNotifications, recentOrders, wishlistItems, user] = await Promise.all([
+            // Fetch admin-created notifications delivered to this user via UserNotification
+            prisma_1.prisma.userNotification.findMany({
+                where: { userId },
+                include: {
+                    notification: {
+                        include: {
+                            createdBy: { select: { firstName: true, lastName: true } },
+                        },
+                    },
+                },
+                orderBy: { notification: { createdAt: "desc" } },
+                take: 10,
+            }),
             prisma_1.prisma.order.findMany({
                 where: { userId },
                 orderBy: { createdAt: "desc" },
@@ -214,7 +227,17 @@ const getMyNotifications = async (req, res) => {
             prisma_1.prisma.user.findUnique({ where: { id: userId } }),
         ]);
         const notifications = [];
-        // Order-based notifications
+        // 1️⃣ Admin-created notifications (from Notification/UserNotification tables)
+        for (const un of adminNotifications) {
+            const n = un.notification;
+            notifications.push({
+                id: 1000 + n.id, // offset to avoid ID collision with synthetic ones
+                type: n.type.toLowerCase(),
+                message: `${n.title}: ${n.message}`,
+                time: formatRelativeTime(n.createdAt),
+            });
+        }
+        // 2️⃣ Order-based synthetic notifications
         const deliveredOrders = recentOrders.filter((o) => o.status === "DELIVERED");
         if (deliveredOrders.length > 0) {
             notifications.push({
@@ -242,7 +265,7 @@ const getMyNotifications = async (req, res) => {
                 time: "Recent",
             });
         }
-        // Wishlist notifications
+        // 3️⃣ Wishlist notifications
         const wishlistCount = wishlistItems?.items?.length || 0;
         if (wishlistCount > 0) {
             notifications.push({
@@ -252,7 +275,7 @@ const getMyNotifications = async (req, res) => {
                 time: "Today",
             });
         }
-        // Account notification
+        // 4️⃣ Account notification
         if (!user?.isVerified) {
             notifications.push({
                 id: 5,
@@ -261,7 +284,7 @@ const getMyNotifications = async (req, res) => {
                 time: "Pending",
             });
         }
-        // Coupon notification
+        // 5️⃣ Coupon notification
         const activeCoupons = await prisma_1.prisma.coupon.count({
             where: { isActive: true, expiresAt: { gte: new Date() } },
         });
@@ -273,7 +296,7 @@ const getMyNotifications = async (req, res) => {
                 time: "Today",
             });
         }
-        // Default welcome notification if nothing else
+        // 6️⃣ Default welcome notification if nothing else
         if (notifications.length === 0) {
             notifications.push({
                 id: 7,
@@ -296,6 +319,25 @@ const getMyNotifications = async (req, res) => {
     }
 };
 exports.getMyNotifications = getMyNotifications;
+/**
+ * Format a date as a relative time string
+ */
+function formatRelativeTime(date) {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    if (diffMins < 1)
+        return "Just now";
+    if (diffMins < 60)
+        return `${diffMins}m ago`;
+    if (diffHours < 24)
+        return `${diffHours}h ago`;
+    if (diffDays < 7)
+        return `${diffDays}d ago`;
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
 // Scaffolded endpoints for dashboard navigation.
 const getMyAddresses = async (_req, res) => {
     return res.status(200).json({ success: true, data: [] });

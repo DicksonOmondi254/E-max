@@ -1,13 +1,20 @@
-# Customer Dashboard - Real Data Implementation
+# Admin-to-User Notification System - Implementation Progress
 
-## Completed Steps
-- [x] 0. Analyze codebase and create plan
-- [x] 1. Add Coupon & UserCoupon models to Prisma schema - DONE
-- [x] 2. Run Prisma db push - DONE (schema pushed to database)
-- [x] 3. Update backend customerDashboardController to return couponsCount + notifications - DONE
-- [x] 4. Update backend dashboardCustomerRoutes to add new endpoints - DONE
-- [x] 5. Update frontend dashboardCustomerService to fetch coupons and notifications - DONE
-- [x] 6. Update frontend DashboardOverview to show real coupons data - DONE
-- [x] 7. Update frontend Notifications component to fetch from API - DONE
-- [x] 8. Backend TypeScript compilation passes - VERIFIED
+## Backend Steps
+- [x] Step 1: Add Notification & UserNotification models to Prisma schema
+- [x] Step 2: Generate Prisma client and sync database (`npx prisma generate` + `npx prisma db push`)
+- [x] Step 3: Create notification service (notificationService.ts)
+- [x] Step 4: Create notification controller (notificationController.ts)
+- [x] Step 5: Create notification routes (notificationRoutes.ts)
+- [x] Step 6: Register notification routes in app.ts
+
+## Frontend Steps
+- [ ] Step 7: Create frontend notification service (notificationService.ts)
+- [ ] Step 8: Create admin Notifications page (ManageNotifications.tsx)
+- [ ] Step 9: Update NotificationBell component with dropdown and real data
+- [ ] Step 10: Create NotificationsList component for dropdown
+- [ ] Step 11: Add "Notifications" nav link to Admin Sidebar
+- [ ] Step 12: Add admin notifications route in App.tsx
+- [ ] Step 13: Add CSS styles for notifications
+- [ ] Step 14: Integrate notifications into customer dashboard
 

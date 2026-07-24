@@ -28,6 +28,7 @@ const shippingRoutes_1 = __importDefault(require("./routes/shippingRoutes"));
 const addressRoutes_1 = __importDefault(require("./routes/addressRoutes"));
 const storeSettingsRoutes_1 = __importDefault(require("./routes/storeSettingsRoutes"));
 const profileRoutes_1 = __importDefault(require("./routes/profileRoutes"));
+const notificationRoutes_1 = __importDefault(require("./routes/notificationRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 /* ===========================================
@@ -85,6 +86,8 @@ app.use("/api/addresses", addressRoutes_1.default);
 app.use("/api/store-settings", storeSettingsRoutes_1.default);
 // Customer Profile
 app.use("/api/profile", profileRoutes_1.default);
+// Notifications (admin create + user receive)
+app.use("/api/notifications", notificationRoutes_1.default);
 /*
 Future Routes
 

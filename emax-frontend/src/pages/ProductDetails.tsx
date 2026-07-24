@@ -11,6 +11,7 @@ import {
   fetchWishlist,
   selectIsInWishlist,
 } from "../redux/wishlistSlice";
+import ProductTabs from "../components/ProductDetails/ProductTabs";
 
 interface Product {
   id: number;
@@ -115,67 +116,72 @@ const ProductDetails = () => {
     : "/images/no-image.svg";
 
   return (
-    <div className="product-details">
-      <div className="product-image">
-        <img src={imageUrl} alt={product.name} />
-      </div>
+    <div className="product-details-page">
+      <div className="product-main">
+        <div className="product-image">
+          <img src={imageUrl} alt={product.name} />
+        </div>
 
-      <div className="product-info">
-        <h1>{product.name}</h1>
+        <div className="product-info">
+          <h1>{product.name}</h1>
 
-        <h3>KES {product.price.toLocaleString()}</h3>
+          <h3>KES {product.price.toLocaleString()}</h3>
 
-        <p>{product.description}</p>
+          <p>{product.description}</p>
 
-        <p>
-          <strong>Brand:</strong> {product.brand.name}
-        </p>
+          <p>
+            <strong>Brand:</strong> {product.brand.name}
+          </p>
 
-        <p>
-          <strong>Category:</strong> {product.category.name}
-        </p>
+          <p>
+            <strong>Category:</strong> {product.category.name}
+          </p>
 
-        <p>
-          <strong>Stock:</strong> {product.stock}
-        </p>
+          <p>
+            <strong>Stock:</strong> {product.stock}
+          </p>
 
-        <div className="product-details-actions" style={{ display: "flex", gap: 12, marginTop: 16 }}>
-          <button
-            className="cart-btn"
-            disabled={product.stock <= 0}
-            onClick={handleAddToCart}
-            style={{ flex: 1 }}
-          >
-            <FaShoppingCart /> {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
-          </button>
+          <div className="product-details-actions" style={{ display: "flex", gap: 12, marginTop: 16 }}>
+            <button
+              className="cart-btn"
+              disabled={product.stock <= 0}
+              onClick={handleAddToCart}
+              style={{ flex: 1 }}
+            >
+              <FaShoppingCart /> {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
+            </button>
 
-          <button
-            className={`wishlist-btn ${isInWishlist ? "in-wishlist" : ""}`}
-            onClick={handleToggleWishlist}
-            disabled={wishlistLoading}
-            aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-            title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
-            style={{
-              padding: "12px 20px",
-              borderRadius: 8,
-              border: `2px solid ${isInWishlist ? "#ef4444" : "#e2e8f0"}`,
-              background: isInWishlist ? "rgba(239,68,68,0.08)" : "#fff",
-              color: isInWishlist ? "#ef4444" : "#94a3b8",
-              cursor: "pointer",
-              fontSize: 18,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              transition: "all 0.2s ease",
-            }}
-          >
-            {isInWishlist ? <FaHeart /> : <FaRegHeart />}
-            <span style={{ fontSize: 14, fontWeight: 600 }}>
-              {wishlistLoading ? "..." : isInWishlist ? "Saved" : "Save"}
-            </span>
-          </button>
+            <button
+              className={`wishlist-btn ${isInWishlist ? "in-wishlist" : ""}`}
+              onClick={handleToggleWishlist}
+              disabled={wishlistLoading}
+              aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+              title={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+              style={{
+                padding: "12px 20px",
+                borderRadius: 8,
+                border: `2px solid ${isInWishlist ? "#ef4444" : "#e2e8f0"}`,
+                background: isInWishlist ? "rgba(239,68,68,0.08)" : "#fff",
+                color: isInWishlist ? "#ef4444" : "#94a3b8",
+                cursor: "pointer",
+                fontSize: 18,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                transition: "all 0.2s ease",
+              }}
+            >
+              {isInWishlist ? <FaHeart /> : <FaRegHeart />}
+              <span style={{ fontSize: 14, fontWeight: 600 }}>
+                {wishlistLoading ? "..." : isInWishlist ? "Saved" : "Save"}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Product Tabs with Reviews */}
+      <ProductTabs productId={product.id} description={product.description} />
     </div>
   );
 };
