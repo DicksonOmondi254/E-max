@@ -10,6 +10,8 @@ import {
   FaStar,
   FaCog,
   FaBell,
+  FaChartBar,
+  FaStore,
 } from "react-icons/fa";
 
 const Sidebar = () => {
@@ -50,6 +52,11 @@ const Sidebar = () => {
           Customers
         </NavLink>
 
+        <NavLink to="/admin/sellers">
+          <FaStore />
+          Sellers
+        </NavLink>
+
         <NavLink to="/admin/reviews">
           <FaStar />
           Reviews
@@ -58,6 +65,11 @@ const Sidebar = () => {
         <NavLink to="/admin/notifications">
           <FaBell />
           Notifications
+        </NavLink>
+
+        <NavLink to="/admin/reports">
+          <FaChartBar />
+          Reports
         </NavLink>
 
         <NavLink to="/admin/settings">

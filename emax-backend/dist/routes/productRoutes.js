@@ -15,6 +15,11 @@ const router = (0, express_1.Router)();
  */
 router.get("/", productController_1.getProducts);
 /**
+ * GET /api/products/deals
+ * Get discounted products
+ */
+router.get("/deals", productController_1.getDeals);
+/**
  * GET /api/products/slug/:slug
  * Get a product by slug
  * (Must come before "/:id")
@@ -32,12 +37,12 @@ router.get("/:id", productController_1.getProduct);
  * POST /api/products
  * Create product
  */
-router.post("/", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("ADMIN", "SUPER_ADMIN"), uploadMiddleware_1.upload.single("image"), productController_1.createProduct);
+router.post("/", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("SELLER", "ADMIN", "SUPER_ADMIN"), uploadMiddleware_1.upload.single("image"), productController_1.createProduct);
 /**
  * PUT /api/products/:id
  * Update product
  */
-router.put("/:id", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("ADMIN", "SUPER_ADMIN"), uploadMiddleware_1.upload.single("image"), productController_1.updateProduct);
+router.put("/:id", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("SELLER", "ADMIN", "SUPER_ADMIN"), uploadMiddleware_1.upload.single("image"), productController_1.updateProduct);
 /**
  * PATCH /api/products/:id/featured
  * Toggle featured status
@@ -47,10 +52,10 @@ router.patch("/:id/featured", authMiddleware_1.protect, (0, roleMiddleware_1.aut
  * PATCH /api/products/:id/status
  * Toggle active/inactive status
  */
-router.patch("/:id/status", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("ADMIN", "SUPER_ADMIN"), productController_1.toggleProductStatus);
+router.patch("/:id/status", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("SELLER", "ADMIN", "SUPER_ADMIN"), productController_1.toggleProductStatus);
 /**
  * DELETE /api/products/:id
  * Delete product
  */
-router.delete("/:id", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("ADMIN", "SUPER_ADMIN"), productController_1.deleteProduct);
+router.delete("/:id", authMiddleware_1.protect, (0, roleMiddleware_1.authorize)("SELLER", "ADMIN", "SUPER_ADMIN"), productController_1.deleteProduct);
 exports.default = router;

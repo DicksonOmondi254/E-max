@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import "./SideTabs.css";
 
@@ -7,13 +8,28 @@ type SideTabProps = {
   brandsNode: React.ReactNode;
 };
 
+type TabKey = "categories" | "brands";
+
 export default function SideTabs({
   categoriesNode,
   brandsNode,
 }: SideTabProps) {
-  const [activeTab, setActiveTab] = useState<
-    "categories" | "brands"
-  >("categories");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read active tab from URL search params (persists across refresh)
+  const activeTab = (searchParams.get("tab") as TabKey) || "categories";
+
+  const handleTabChange = (tab: TabKey) => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      if (tab === "categories") {
+        newParams.delete("tab");
+      } else {
+        newParams.set("tab", tab);
+      }
+      return newParams;
+    });
+  };
 
   const content = useMemo(() => {
     return activeTab === "categories" ? categoriesNode : brandsNode;
@@ -29,7 +45,7 @@ export default function SideTabs({
               ? "side-tabs__tab side-tabs__tab--active"
               : "side-tabs__tab"
           }
-          onClick={() => setActiveTab("categories")}
+          onClick={() => handleTabChange("categories")}
         >
           Categories
         </button>
@@ -40,7 +56,7 @@ export default function SideTabs({
               ? "side-tabs__tab side-tabs__tab--active"
               : "side-tabs__tab"
           }
-          onClick={() => setActiveTab("brands")}
+          onClick={() => handleTabChange("brands")}
         >
           Brands
         </button>

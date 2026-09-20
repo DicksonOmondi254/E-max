@@ -7,6 +7,7 @@ interface Props {
   oldPrice: number;
   rating: number;
   discount: number;
+  soldPercent?: number;
 }
 
 const FlashSaleCard = ({
@@ -16,6 +17,7 @@ const FlashSaleCard = ({
   oldPrice,
   rating,
   discount,
+  soldPercent = 60,
 }: Props) => {
   return (
     <div className="flash-card">
@@ -42,6 +44,17 @@ const FlashSaleCard = ({
         <span className="old-price">
           KES {oldPrice.toLocaleString()}
         </span>
+      </div>
+
+      {/* ── Inventory progress bar ── */}
+      <div className="sold-bar">
+        <div className="sold-bar__track">
+          <div
+            className="sold-bar__fill"
+            style={{ width: `${soldPercent}%` }}
+          />
+        </div>
+        <span className="sold-bar__label">{soldPercent}% Sold</span>
       </div>
 
       <div className="card-actions">

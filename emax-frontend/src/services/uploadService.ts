@@ -4,7 +4,6 @@ export const uploadProductImage = async (
   file: File
 ) => {
   const formData = new FormData();
-
   formData.append("image", file);
 
   const response = await api.post(
@@ -12,8 +11,26 @@ export const uploadProductImage = async (
     formData,
     {
       headers: {
-        "Content-Type":
-          "multipart/form-data",
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const uploadSellerImage = async (
+  file: File
+): Promise<{ success: boolean; image: string; url: string }> => {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await api.post(
+    "/upload/seller",
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
       },
     }
   );

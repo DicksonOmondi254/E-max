@@ -8,6 +8,9 @@ export interface Product {
   thumbnail: string;
   featured: boolean;
   active: boolean;
+  user?: {
+    trustBadges?: string;
+  };
 }
 
 export interface ProductReview {

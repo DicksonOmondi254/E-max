@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   FaShoppingBag,
   FaBox,
@@ -76,16 +76,49 @@ const canCancel = (status: string): boolean => {
   return s === "PENDING" || s === "PROCESSING";
 };
 
+// ── Tabs definition ──
+const TABS: { key: FilterTab; label: string }[] = [
+  { key: "ALL", label: "All Orders" },
+  { key: "PENDING", label: "Pending" },
+  { key: "PROCESSING", label: "Processing" },
+  { key: "SHIPPED", label: "Shipped" },
+  { key: "DELIVERED", label: "Delivered" },
+  { key: "CANCELLED", label: "Cancelled" },
+];
+
 // ── Component ──
 const CustomerOrders = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read state from URL search params for persistence across refreshes
+  const activeFilter = (searchParams.get("filter")?.toUpperCase() as FilterTab) || "ALL";
+  const searchQuery = searchParams.get("q") || "";
+  const expandedIdStr = searchParams.get("expanded");
+  const expandedId = expandedIdStr ? Number(expandedIdStr) : null;
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState<FilterTab>("ALL");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [expandedId, setExpandedId] = useState<number | null>(null);
   const [cancel, setCancel] = useState<CancelState>({ show: false, orderId: null, loading: false });
   const [toast, setToast] = useState<ToastState>({ show: false, message: "" });
+
+  // Helper to update URL params
+  const updateParams = useCallback(
+    (updates: Record<string, string | null>) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        Object.entries(updates).forEach(([key, value]) => {
+          if (value === null || value === "" || value === "ALL") {
+            newParams.delete(key);
+          } else {
+            newParams.set(key, value);
+          }
+        });
+        return newParams;
+      });
+    },
+    [setSearchParams]
+  );
 
   // ── Load Orders ──
   const loadOrders = useCallback(async () => {
@@ -154,7 +187,6 @@ const CustomerOrders = () => {
     setCancel((prev) => ({ ...prev, loading: true }));
     try {
       await orderService.cancelOrder(cancel.orderId);
-      // Update the order in local state
       setOrders((prev) =>
         prev.map((o) =>
           o.id === cancel.orderId ? { ...o, status: "CANCELLED" as const } : o
@@ -173,20 +205,20 @@ const CustomerOrders = () => {
     setTimeout(() => setToast({ show: false, message: "" }), 4000);
   };
 
-  // ── Toggle expand ──
+  // ── Toggle expand (persisted in URL) ──
   const toggleExpand = (id: number) => {
-    setExpandedId((prev) => (prev === id ? null : id));
+    const newExpandedId = expandedId === id ? null : id;
+    updateParams({ expanded: newExpandedId ? String(newExpandedId) : null });
   };
 
-  // ── Filters ──
-  const tabs: { key: FilterTab; label: string }[] = [
-    { key: "ALL", label: "All Orders" },
-    { key: "PENDING", label: "Pending" },
-    { key: "PROCESSING", label: "Processing" },
-    { key: "SHIPPED", label: "Shipped" },
-    { key: "DELIVERED", label: "Delivered" },
-    { key: "CANCELLED", label: "Cancelled" },
-  ];
+  // ── Handlers ──
+  const handleFilterChange = (tab: FilterTab) => {
+    updateParams({ filter: tab === "ALL" ? null : tab });
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateParams({ q: e.target.value || null });
+  };
 
   // ── Render ──
   return (
@@ -226,11 +258,11 @@ const CustomerOrders = () => {
       {/* Filter & Search Bar */}
       <div className="orders-filter-bar fade-in">
         <div className="orders-tabs">
-          {tabs.map((tab) => (
+          {TABS.map((tab) => (
             <button
               key={tab.key}
               className={`orders-tab-btn ${activeFilter === tab.key ? "active" : ""}`}
-              onClick={() => setActiveFilter(tab.key)}
+              onClick={() => handleFilterChange(tab.key)}
             >
               {tab.label}
               <span className="orders-tab-count">{tabCounts[tab.key]}</span>
@@ -245,7 +277,7 @@ const CustomerOrders = () => {
             className="orders-search-input"
             placeholder="Search by order # or product..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleSearchChange}
           />
         </div>
       </div>

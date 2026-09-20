@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-
+import { Link } from "react-router-dom";
 import ProductCard from "../ProductCard/ProductCard";
-
 import { productService } from "../../services/productService";
+import "./FeaturedProducts.css";
 
 type Product = {
   id: number;
@@ -28,35 +28,30 @@ export default function FeaturedProducts() {
         console.error(e);
       }
     };
-
     load();
   }, []);
 
-  const featured = useMemo(() => {
-    // Admin controls `featured`; just show active featured items.
-    return products
-      .filter((p) => p.featured && p.active)
-      .slice(0, 8);
+const featured = useMemo(() => {
+    return products.filter((p) => p.featured && p.active).slice(0, 8);
   }, [products]);
 
-  return (
-    <section style={{ padding: "60px" }}>
-      <h2>Featured Products</h2>
+  // Hide the section entirely when there are no featured products to avoid
+  // showing an empty/"unfinished" section on the landing page.
+  if (featured.length === 0) return null;
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "20px",
-          marginTop: "30px",
-        }}
-      >
-        {featured.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))}
+  return (
+    <section className="fp-section">
+      <div className="page-wrapper">
+        <div className="section-title">
+          <h2>Featured Products</h2>
+          <Link to="/products">View All →</Link>
+        </div>
+
+        <div className="fp-grid">
+          {featured.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
       </div>
     </section>
   );

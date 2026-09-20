@@ -4,6 +4,7 @@ import {
   getProducts,
   getProduct,
   getProductBySlug,
+  getDeals,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -26,6 +27,12 @@ const router = Router();
  * Get all products
  */
 router.get("/", getProducts);
+
+/**
+ * GET /api/products/deals
+ * Get discounted products
+ */
+router.get("/deals", getDeals);
 
 /**
  * GET /api/products/slug/:slug
@@ -51,7 +58,7 @@ router.get("/:id", getProduct);
 router.post(
   "/",
   protect,
-  authorize("ADMIN", "SUPER_ADMIN"),
+  authorize("SELLER", "ADMIN", "SUPER_ADMIN"),
   upload.single("image"),
   createProduct
 );
@@ -63,7 +70,7 @@ router.post(
 router.put(
   "/:id",
   protect,
-  authorize("ADMIN", "SUPER_ADMIN"),
+  authorize("SELLER", "ADMIN", "SUPER_ADMIN"),
   upload.single("image"),
   updateProduct
 );
@@ -86,7 +93,7 @@ router.patch(
 router.patch(
   "/:id/status",
   protect,
- authorize("ADMIN", "SUPER_ADMIN"),
+  authorize("SELLER", "ADMIN", "SUPER_ADMIN"),
   toggleProductStatus
 );
 
@@ -97,7 +104,7 @@ router.patch(
 router.delete(
   "/:id",
   protect,
-  authorize("ADMIN", "SUPER_ADMIN"),
+  authorize("SELLER", "ADMIN", "SUPER_ADMIN"),
   deleteProduct
 );
 

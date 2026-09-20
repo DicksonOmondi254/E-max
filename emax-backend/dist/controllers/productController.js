@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toggleProductStatus = exports.toggleFeatured = exports.getProductBySlug = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProduct = exports.getProducts = void 0;
+exports.toggleProductStatus = exports.toggleFeatured = exports.getProductBySlug = exports.getDeals = exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProduct = exports.getProducts = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const productService_1 = require("../services/productService");
@@ -130,6 +130,7 @@ const createProduct = async (req, res) => {
             featured: req.body.featured === true ||
                 req.body.featured === "true",
             thumbnail,
+            userId: req.user.id,
             categoryId: Number(req.body.categoryId),
             brandId: Number(req.body.brandId),
         });
@@ -160,6 +161,14 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: "Product not found.",
+            });
+        }
+        // Ownership check: SELLERs can only update their own products
+        if (req.user.role === "SELLER" &&
+            existing.userId !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied. You can only update your own products.",
             });
         }
         const errors = (0, productValidation_1.validateProduct)(req.body);
@@ -221,6 +230,14 @@ const deleteProduct = async (req, res) => {
                 message: "Product not found.",
             });
         }
+        // Ownership check: SELLERs can only delete their own products
+        if (req.user.role === "SELLER" &&
+            existing.userId !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied. You can only delete your own products.",
+            });
+        }
         await productService_1.productService.deleteProduct(id);
         if (existing.thumbnail) {
             const imagePath = path_1.default.join(UPLOAD_PATH, existing.thumbnail);
@@ -243,6 +260,28 @@ const deleteProduct = async (req, res) => {
     }
 };
 exports.deleteProduct = deleteProduct;
+/* =====================================================
+   GET DEALS (DISCOUNTED PRODUCTS)
+===================================================== */
+const getDeals = async (req, res) => {
+    try {
+        const products = await productService_1.productService.getDeals();
+        res.status(200).json({
+            success: true,
+            count: products.length,
+            data: products,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: error.message ||
+                "Failed to fetch deals.",
+        });
+    }
+};
+exports.getDeals = getDeals;
 /* =====================================================
    GET PRODUCT BY SLUG
 ===================================================== */

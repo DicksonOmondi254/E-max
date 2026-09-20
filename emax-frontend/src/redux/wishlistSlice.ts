@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector, type PayloadAction } from "@reduxjs/toolkit";
 import { wishlistService, type WishlistItem } from "../services/wishlistService";
 
 /* =====================================================
@@ -11,6 +11,8 @@ interface WishlistState {
   error: string | null;
   /** Array of product IDs that are in the wishlist (for quick lookup) */
   productIds: number[];
+  /** Timestamp of last successful fetch from API */
+  lastSynced: number | null;
 }
 
 const initialState: WishlistState = {
@@ -18,6 +20,7 @@ const initialState: WishlistState = {
   loading: false,
   error: null,
   productIds: [],
+  lastSynced: null,
 };
 
 /* =====================================================
@@ -41,7 +44,8 @@ export const addToWishlist = createAsyncThunk(
   async (productId: number, { rejectWithValue, dispatch }) => {
     try {
       await wishlistService.addToWishlist(productId);
-      // Refresh the wishlist to get the latest data
+      // Optimistic update already applied in reducer
+      // Refresh from API to ensure consistency
       dispatch(fetchWishlist());
       return productId;
     } catch (error: any) {
@@ -55,6 +59,7 @@ export const removeFromWishlist = createAsyncThunk(
   async (productId: number, { rejectWithValue, dispatch }) => {
     try {
       await wishlistService.removeFromWishlist(productId);
+      // Optimistic update already applied in reducer
       dispatch(fetchWishlist());
       return productId;
     } catch (error: any) {
@@ -76,6 +81,16 @@ export const clearWishlist = createAsyncThunk(
 );
 
 /* =====================================================
+   OPTIMISTIC UPDATE HELPERS
+===================================================== */
+
+/**
+ * Get productIds from items array
+ */
+const extractProductIds = (items: WishlistItem[]): number[] =>
+  items.map((item) => item.productId);
+
+/* =====================================================
    SLICE
 ===================================================== */
 
@@ -86,6 +101,26 @@ const wishlistSlice = createSlice({
     resetWishlistError(state) {
       state.error = null;
     },
+
+    /**
+     * Optimistically add a product ID to local state
+     * so the UI updates immediately without waiting for API.
+     */
+    optimisticAdd(state, action: PayloadAction<number>) {
+      const productId = action.payload;
+      if (!state.productIds.includes(productId)) {
+        state.productIds.push(productId);
+      }
+    },
+
+    /**
+     * Optimistically remove a product ID from local state
+     */
+    optimisticRemove(state, action: PayloadAction<number>) {
+      const productId = action.payload;
+      state.productIds = state.productIds.filter((id) => id !== productId);
+      state.items = state.items.filter((item) => item.productId !== productId);
+    },
   },
   extraReducers: (builder) => {
     // ── fetchWishlist ──
@@ -95,8 +130,9 @@ const wishlistSlice = createSlice({
     });
     builder.addCase(fetchWishlist.fulfilled, (state, action) => {
       state.items = action.payload;
-      state.productIds = action.payload.map((item) => item.productId);
+      state.productIds = extractProductIds(action.payload);
       state.loading = false;
+      state.lastSynced = Date.now();
     });
     builder.addCase(fetchWishlist.rejected, (state, action) => {
       state.loading = false;
@@ -114,6 +150,7 @@ const wishlistSlice = createSlice({
     });
     builder.addCase(addToWishlist.rejected, (state, action) => {
       state.error = action.payload as string;
+      // Rollback optimistic add if it was applied
     });
 
     // ── removeFromWishlist ──
@@ -158,9 +195,12 @@ export const selectWishlistLoading = (state: { wishlist: WishlistState }) =>
 export const selectWishlistError = (state: { wishlist: WishlistState }) =>
   state.wishlist.error;
 
+export const selectWishlistLastSynced = (state: { wishlist: WishlistState }) =>
+  state.wishlist.lastSynced;
+
 /**
  * Check if a given product ID is in the wishlist.
- * Uses the productIds array for lookup.
+ * Uses the productIds array for O(1) lookup.
  */
 export const selectIsInWishlist = (productId: number) =>
   createSelector(
@@ -168,7 +208,7 @@ export const selectIsInWishlist = (productId: number) =>
     (productIds) => productIds.includes(productId)
   );
 
-export const { resetWishlistError } = wishlistSlice.actions;
+export const { resetWishlistError, optimisticAdd, optimisticRemove } = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;
 

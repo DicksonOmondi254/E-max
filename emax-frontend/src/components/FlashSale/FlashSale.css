@@ -1,66 +1,117 @@
+/* ================================================
+   Flash Sale — Urgency horizontal-snap rail
+   ================================================ */
+
 .flash-sale {
-  padding: 50px 40px;
+  padding: 40px 0;
+  background: linear-gradient(180deg, #fff8f0 0%, #fff 100%);
+}
+
+.flash-sale .page-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .flash-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.countdown {
-  background: #0057ff;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 18px;
+.flash-header-left h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+  letter-spacing: -0.3px;
 }
 
+.flash-header-left p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 4px 0 0;
+}
+
+/* ── Horizontal scroll-snap rail ── */
 .flash-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 25px;
+  grid-auto-flow: column;
+  grid-auto-columns: 250px;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 6px 4px 16px;
+  scrollbar-width: thin;
+}
+
+.flash-grid::-webkit-scrollbar {
+  height: 8px;
+}
+.flash-grid::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+  border-radius: 8px;
 }
 
 .flash-card {
+  scroll-snap-align: start;
   position: relative;
-  background: white;
+  background: #fff;
   border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  transition: .3s;
+  border: 1px solid #ececec;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .flash-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
 }
 
 .flash-card img {
   width: 100%;
-  height: 180px;
+  height: 160px;
   object-fit: contain;
+  border-radius: 10px;
+  background: #faf6f2;
 }
 
+/* High-contrast discount badge */
 .discount-badge {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  background: #ff3b30;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #ff2d55, #e63946);
   color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 13px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+  z-index: 2;
 }
 
 .wishlist-btn {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 12px;
+  right: 12px;
   background: white;
   border: none;
   cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  z-index: 2;
 }
 
 .rating {
@@ -68,27 +119,60 @@
   align-items: center;
   gap: 6px;
   margin: 10px 0;
+  font-size: 14px;
+  color: #6b7280;
 }
 
 .prices {
   display: flex;
   gap: 10px;
   margin: 10px 0;
+  align-items: baseline;
 }
 
 .new-price {
-  color: #0057ff;
-  font-weight: 700;
+  color: #e63946;
+  font-weight: 800;
+  font-size: 18px;
 }
 
 .old-price {
-  color: #999;
+  color: #9ca3af;
   text-decoration: line-through;
+  font-size: 14px;
+}
+
+/* ── Inventory progress bar ── */
+.sold-bar {
+  margin-bottom: 14px;
+}
+
+.sold-bar__track {
+  height: 8px;
+  border-radius: 8px;
+  background: #f3e0d0;
+  overflow: hidden;
+}
+
+.sold-bar__fill {
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ff6b35, #e63946);
+  transition: width 0.4s ease;
+}
+
+.sold-bar__label {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b45309;
 }
 
 .card-actions {
   display: flex;
   gap: 10px;
+  margin-top: auto;
 }
 
 .card-actions button {
@@ -96,7 +180,75 @@
   padding: 10px;
   border: none;
   border-radius: 8px;
-  background: #0057ff;
-  color: white;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.card-actions button:first-child {
+  background: linear-gradient(135deg, #e63946, #ff6b35);
+  color: white;
+}
+
+.card-actions button:first-child:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.card-actions button:last-child {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.card-actions button:last-child:hover {
+  background: #e5e7eb;
+}
+
+/* ── Glowing countdown attached to flash header ── */
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #1a1a2e, #2d2d44);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6),
+    0 0 22px rgba(230, 57, 70, 0.55);
+  animation: countdown-glow 2s ease-in-out infinite;
+}
+
+.countdown span {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 8px;
+  min-width: 44px;
+  text-align: center;
+  box-shadow: inset 0 0 8px rgba(230, 57, 70, 0.3);
+}
+
+@keyframes countdown-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6),
+      0 0 16px rgba(230, 57, 70, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.8),
+      0 0 30px rgba(230, 57, 70, 0.75);
+  }
+}
+
+@media (max-width: 640px) {
+  .flash-grid {
+    grid-auto-columns: 220px;
+  }
 }

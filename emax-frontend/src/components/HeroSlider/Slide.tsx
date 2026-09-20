@@ -1,7 +1,7 @@
-import type { Slide as SlideType } from "./sliderData";
+import type { HeroSlide } from "./sliderData";
 
 interface Props {
-  slide: SlideType;
+  slide: HeroSlide;
 }
 
 const Slide = ({ slide }: Props) => {
@@ -11,13 +11,13 @@ const Slide = ({ slide }: Props) => {
       style={{ background: slide.background }}
     >
       <div className="slide-content">
+        {slide.badge && <div className="slide-badge">{slide.badge}</div>}
         <h1>{slide.title}</h1>
-
         <p>{slide.subtitle}</p>
-
-        <button>{slide.button}</button>
+        <a href={slide.link || "/products"} className="slide-cta">
+          {slide.button}
+        </a>
       </div>
-
       <div className="slide-image">
         <img src={slide.image} alt={slide.title} />
       </div>
@@ -26,3 +26,4 @@ const Slide = ({ slide }: Props) => {
 };
 
 export default Slide;
+

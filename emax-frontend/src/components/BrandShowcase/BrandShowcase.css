@@ -1,43 +1,346 @@
-.brands{
+/* ==========================================
+   Brand Showcase - Modern Redesign
+   ========================================== */
 
-padding:40px;
-
+.brand-showcase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
 }
 
-.brand-grid{
+/* ──────── Header ──────── */
 
-display:grid;
-
-grid-template-columns:repeat(4,1fr);
-
-gap:20px;
-
-margin-top:20px;
-
+.brand-showcase__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  gap: 20px;
 }
 
-.brand-card{
-
-background:white;
-
-padding:35px;
-
-border-radius:10px;
-
-text-align:center;
-
-font-weight:bold;
-
-box-shadow:0 3px 10px rgba(0,0,0,.08);
-
-transition:.3s;
-
+.brand-showcase__header-left {
+  flex: 1;
 }
 
-.brand-card:hover{
-
-background:#0057ff;
-
-color:white;
-
+.brand-showcase__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
 }
+
+.brand-showcase__title-icon {
+  color: #6366f1;
+  font-size: 24px;
+}
+
+.brand-showcase__subtitle {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 500;
+}
+
+.brand-showcase__view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6366f1;
+  background: #eef2ff;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.brand-showcase__view-all:hover {
+  background: #6366f1;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.brand-showcase__view-all svg {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.brand-showcase__view-all:hover svg {
+  transform: translateX(3px);
+}
+
+/* ──────── Grid ──────── */
+
+.brand-showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* ──────── Card ──────── */
+
+.brand-showcase__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.brand-showcase__card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px var(--card-shadow, rgba(99, 102, 241, 0.2));
+  border-color: transparent;
+}
+
+.brand-showcase__card-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--card-gradient);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.brand-showcase__card:hover .brand-showcase__card-bg {
+  opacity: 0.05;
+}
+
+.brand-showcase__card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px 24px;
+  text-align: center;
+}
+
+/* ──────── Logo ──────── */
+
+.brand-showcase__logo-wrapper {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 18px;
+  background: #f9fafb;
+  border: 3px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.35s ease;
+  flex-shrink: 0;
+}
+
+.brand-showcase__card:hover .brand-showcase__logo-wrapper {
+  border-color: transparent;
+  transform: scale(1.08);
+  box-shadow: 0 0 0 3px var(--card-gradient, #6366f1);
+}
+
+.brand-showcase__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+  transition: transform 0.3s ease;
+}
+
+.brand-showcase__card:hover .brand-showcase__logo {
+  transform: scale(1.1);
+}
+
+.brand-showcase__logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+  color: #d1d5db;
+  background: #f3f4f6;
+}
+
+.brand-showcase__card:hover .brand-showcase__logo-placeholder {
+  background: transparent;
+  color: #fff;
+}
+
+/* ──────── Name ──────── */
+
+.brand-showcase__name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 10px 0;
+  transition: color 0.3s ease;
+  line-height: 1.3;
+}
+
+.brand-showcase__card:hover .brand-showcase__name {
+  color: #fff;
+}
+
+/* ──────── Count ──────── */
+
+.brand-showcase__count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 5px 14px;
+  border-radius: 100px;
+  transition: all 0.3s ease;
+}
+
+.brand-showcase__card:hover .brand-showcase__count {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.brand-showcase__count-icon {
+  font-size: 11px;
+}
+
+/* ──────── Arrow ──────── */
+
+.brand-showcase__card-arrow {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #9ca3af;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.brand-showcase__card:hover .brand-showcase__card-arrow {
+  opacity: 1;
+  transform: translateX(0);
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* ──────── Skeleton Loading ──────── */
+
+.brand-showcase__skeleton {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.brand-showcase__skeleton-logo {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.brand-showcase__skeleton-name {
+  height: 18px;
+  width: 120px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.brand-showcase__skeleton-count {
+  height: 28px;
+  width: 100px;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ──────── Responsive ──────── */
+
+@media (max-width: 768px) {
+  .brand-showcase {
+    padding: 40px 16px;
+  }
+
+  .brand-showcase__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .brand-showcase__title {
+    font-size: 22px;
+  }
+
+  .brand-showcase__grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .brand-showcase__card-content {
+    padding: 24px 18px 20px;
+  }
+
+  .brand-showcase__logo-wrapper {
+    width: 72px;
+    height: 72px;
+  }
+
+  .brand-showcase__logo-placeholder {
+    font-size: 26px;
+  }
+
+  .brand-showcase__name {
+    font-size: 15px;
+  }
+
+  .brand-showcase__view-all {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-showcase__grid {
+    grid-template-columns: 1fr;
+  }
+}
+

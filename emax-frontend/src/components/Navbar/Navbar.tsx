@@ -41,11 +41,11 @@ const Navbar = () => {
             </li>
 
             <li>
-              <Link to="/products">Deals</Link>
+              <Link to="/deals">Deals</Link>
             </li>
 
             <li>
-              <Link to="/products">Brands</Link>
+              <Link to="/brands">Brands</Link>
             </li>
 
           </ul>

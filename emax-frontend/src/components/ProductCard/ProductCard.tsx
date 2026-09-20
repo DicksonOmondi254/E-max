@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import TrustBadges from "../TrustBadges/TrustBadges";
 import "./ProductCard.css";
 
 import type { Product as ApiProduct } from "../../types/product";
@@ -56,6 +57,18 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const image = thumb
     ? `http://localhost:5000/uploads/products/${thumb}`
     : img ?? FALLBACK_IMAGE;
+
+  // Trust badges are inherited from the shop (seller) that owns the product.
+  // The backend returns them as a JSON string on product.user.trustBadges.
+  const trustBadgesRaw = (product as any)?.user?.trustBadges;
+  let trustBadges: string[] | undefined;
+  if (typeof trustBadgesRaw === "string" && trustBadgesRaw) {
+    try {
+      trustBadges = JSON.parse(trustBadgesRaw);
+    } catch {
+      trustBadges = [trustBadgesRaw];
+    }
+  }
 
   const slugOrId =
     ("slug" in product && product.slug) || (product as any).id;
@@ -136,13 +149,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {stock > 0 ? `${stock} items available` : "Out of Stock"}
         </p>
 
-        <button
+<button
           className="cart-btn"
           disabled={stock <= 0}
           onClick={handleAddToCart}
         >
           {stock > 0 ? "Add to Cart" : "Out of Stock"}
         </button>
+
+<TrustBadges compact badges={trustBadges} />
 
       </div>
     </div>

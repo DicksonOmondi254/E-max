@@ -1,0 +1,384 @@
+/* ==========================================
+   Brand Products Page
+   ========================================== */
+
+.brand-products-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+/* ──────── Hero Section ──────── */
+
+.brand-products__hero {
+  position: relative;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  overflow: hidden;
+  padding: 48px 24px;
+}
+
+.brand-products__hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.brand-products__hero-pattern {
+  position: absolute;
+  inset: -50%;
+  background-image: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: patternShift 20s linear infinite;
+}
+
+@keyframes patternShift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}
+
+.brand-products__hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand-products__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 28px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.brand-products__back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateX(-3px);
+}
+
+.brand-products__hero-info {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.brand-products__hero-logo-wrapper {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.brand-products__hero-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+
+.brand-products__hero-logo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  color: #c7d2fe;
+  background: #f3f4f6;
+}
+
+.brand-products__hero-text {
+  flex: 1;
+}
+
+.brand-products__hero-name {
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.brand-products__hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand-products__hero-count,
+.brand-products__hero-available {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+}
+
+.brand-products__hero-count svg,
+.brand-products__hero-available svg {
+  font-size: 12px;
+}
+
+.brand-products__hero-available {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ──────── Hero Loading Skeleton ──────── */
+
+.brand-products__hero--loading {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+}
+
+.brand-products__hero--error {
+  background: #fef2f2;
+}
+
+.brand-products__hero-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.brand-products__skeleton-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #d0d0d0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.brand-products__skeleton-text {
+  height: 32px;
+  width: 200px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #d0d0d0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.brand-products__skeleton-count {
+  height: 24px;
+  width: 140px;
+  border-radius: 100px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #d0d0d0 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ──────── Error State ──────── */
+
+.brand-products__error-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.brand-products__error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.brand-products__error-content h2 {
+  font-size: 22px;
+  color: #991b1b;
+  margin: 0 0 8px 0;
+}
+
+.brand-products__error-content p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+/* ──────── Body Section ──────── */
+
+.brand-products__body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+.brand-products__results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.brand-products__results-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.brand-products__results-text strong {
+  color: #111827;
+}
+
+/* ──────── Loading State ──────── */
+
+.brand-products__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.brand-products__spinner {
+  font-size: 32px;
+  animation: spin 1s linear infinite;
+  color: #6366f1;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.brand-products__loading p {
+  font-size: 15px;
+  margin: 0;
+}
+
+/* ──────── Empty State ──────── */
+
+.brand-products__empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.brand-products__empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  color: #9ca3af;
+}
+
+.brand-products__empty h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.brand-products__empty p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+}
+
+.brand-products__browse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #6366f1;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.brand-products__browse-btn:hover {
+  background: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+}
+
+/* ──────── Responsive ──────── */
+
+@media (max-width: 768px) {
+  .brand-products__hero {
+    padding: 32px 16px;
+  }
+
+  .brand-products__hero-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .brand-products__hero-logo-wrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 18px;
+  }
+
+  .brand-products__hero-logo-placeholder {
+    font-size: 32px;
+  }
+
+  .brand-products__hero-name {
+    font-size: 26px;
+  }
+
+  .brand-products__back-btn {
+    margin-bottom: 20px;
+  }
+
+  .brand-products__body {
+    padding: 24px 16px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-products__hero-name {
+    font-size: 22px;
+  }
+
+  .brand-products__hero-meta {
+    flex-direction: column;
+  }
+
+  .brand-products__hero-logo-wrapper {
+    width: 72px;
+    height: 72px;
+  }
+
+  .brand-products__empty {
+    padding: 40px 16px;
+  }
+}
+

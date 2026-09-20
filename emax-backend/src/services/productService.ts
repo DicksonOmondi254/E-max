@@ -10,6 +10,7 @@ export interface ProductData {
  thumbnail: string;
   featured: boolean;
   active?: boolean;
+  userId: number;
   categoryId: number;
   brandId: number;
 }
@@ -124,11 +125,16 @@ async getProducts(query: ProductQuery) {
     prisma.product.findMany({
       where,
 
-      include: {
+include: {
         category: true,
         brand: true,
         images: true,
         reviews: true,
+        user: {
+          select: {
+            trustBadges: true,
+          },
+        },
       },
 
       skip,
@@ -154,7 +160,7 @@ async getProducts(query: ProductQuery) {
   
   async getAllProducts() {
     return prisma.product.findMany({
-      include: {
+include: {
         category: true,
         brand: true,
         images: true,
@@ -166,6 +172,11 @@ async getProducts(query: ProductQuery) {
                 lastName: true,
               },
             },
+          },
+        },
+        user: {
+          select: {
+            trustBadges: true,
           },
         },
       },
@@ -187,6 +198,11 @@ async getProducts(query: ProductQuery) {
         category: true,
         brand: true,
         images: true,
+        user: {
+          select: {
+            trustBadges: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -200,7 +216,7 @@ async getProducts(query: ProductQuery) {
   async getProductById(id: number) {
     return prisma.product.findUnique({
       where: { id },
-      include: {
+include: {
         category: true,
         brand: true,
         images: true,
@@ -212,6 +228,11 @@ async getProducts(query: ProductQuery) {
                 lastName: true,
               },
             },
+          },
+        },
+        user: {
+          select: {
+            trustBadges: true,
           },
         },
       },
@@ -236,6 +257,11 @@ async getProducts(query: ProductQuery) {
                 lastName: true,
               },
             },
+          },
+        },
+        user: {
+          select: {
+            trustBadges: true,
           },
         },
       },
@@ -273,7 +299,7 @@ async getProducts(query: ProductQuery) {
   /* ==========================================
      CREATE PRODUCT
   ========================================== */
-  async createProduct(data: ProductData) {
+async createProduct(data: ProductData) {
     return prisma.product.create({
       data: {
         name: data.name,
@@ -284,6 +310,12 @@ async getProducts(query: ProductQuery) {
         thumbnail: data.thumbnail,
         featured: data.featured,
         active: data.active ?? true,
+
+        user: {
+          connect: {
+            id: data.userId,
+          },
+        },
 
         category: {
           connect: {
@@ -425,6 +457,26 @@ async getProducts(query: ProductQuery) {
   },
 
   /* ==========================================
+     GET DEALS (DISCOUNTED PRODUCTS)
+  ========================================== */
+  async getDeals() {
+    return prisma.product.findMany({
+      where: {
+        discount: { gt: 0 },
+        active: true,
+      },
+      include: {
+        category: true,
+        brand: true,
+        images: true,
+      },
+      orderBy: {
+        discount: "desc",
+      },
+    });
+  },
+
+  /* ==========================================
      DELETE PRODUCT
   ========================================== */
   async deleteProduct(id: number) {
@@ -441,3 +493,4 @@ async getProducts(query: ProductQuery) {
     });
   },
 };
+

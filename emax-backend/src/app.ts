@@ -26,6 +26,9 @@ import addressRoutes from "./routes/addressRoutes";
 import storeSettingsRoutes from "./routes/storeSettingsRoutes";
 import profileRoutes from "./routes/profileRoutes";
 import notificationRoutes from "./routes/notificationRoutes";
+import reportRoutes from "./routes/reportRoutes";
+import sellerRoutes from "./routes/sellerRoutes";
+import sellerManagementRoutes from "./routes/sellerManagementRoutes";
 
 dotenv.config();
 
@@ -91,6 +94,9 @@ app.use("/api/dashboard", dashboardRoutes);
 // Customer-specific route set (keeps existing admin/global dashboard intact)
 app.use("/api/dashboard/customer", dashboardCustomerRoutes);
 
+// Seller routes
+app.use("/api/seller", sellerRoutes);
+
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
@@ -114,6 +120,12 @@ app.use("/api/profile", profileRoutes);
 
 // Notifications (admin create + user receive)
 app.use("/api/notifications", notificationRoutes);
+
+// Admin Reports
+app.use("/api/admin/reports", reportRoutes);
+
+// Admin Seller Management
+app.use("/api/admin/sellers", sellerManagementRoutes);
 
 /*
 Future Routes

@@ -195,6 +195,21 @@ export const productService = {
   },
 
   /* =====================================
+     GET DEALS (DISCOUNTED PRODUCTS)
+  ===================================== */
+
+  async getDeals() {
+    const response = await fetch(
+      `${API_URL}/deals`
+    );
+
+    const result =
+      await handleResponse(response);
+
+    return result.data;
+  },
+
+  /* =====================================
      TOGGLE FEATURED
   ===================================== */
 

@@ -29,6 +29,9 @@ const addressRoutes_1 = __importDefault(require("./routes/addressRoutes"));
 const storeSettingsRoutes_1 = __importDefault(require("./routes/storeSettingsRoutes"));
 const profileRoutes_1 = __importDefault(require("./routes/profileRoutes"));
 const notificationRoutes_1 = __importDefault(require("./routes/notificationRoutes"));
+const reportRoutes_1 = __importDefault(require("./routes/reportRoutes"));
+const sellerRoutes_1 = __importDefault(require("./routes/sellerRoutes"));
+const sellerManagementRoutes_1 = __importDefault(require("./routes/sellerManagementRoutes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 /* ===========================================
@@ -71,6 +74,8 @@ app.use("/api/upload", uploadRoutes_1.default);
 app.use("/api/dashboard", dashboardRoutes_1.default);
 // Customer-specific route set (keeps existing admin/global dashboard intact)
 app.use("/api/dashboard/customer", dashboardCustomerRoutes_1.default);
+// Seller routes
+app.use("/api/seller", sellerRoutes_1.default);
 app.use("/api/orders", orderRoutes_1.default);
 app.use("/api/cart", cartRoutes_1.default);
 app.use("/api/checkout", checkoutRoutes_1.default);
@@ -88,6 +93,10 @@ app.use("/api/store-settings", storeSettingsRoutes_1.default);
 app.use("/api/profile", profileRoutes_1.default);
 // Notifications (admin create + user receive)
 app.use("/api/notifications", notificationRoutes_1.default);
+// Admin Reports
+app.use("/api/admin/reports", reportRoutes_1.default);
+// Admin Seller Management
+app.use("/api/admin/sellers", sellerManagementRoutes_1.default);
 /*
 Future Routes
 

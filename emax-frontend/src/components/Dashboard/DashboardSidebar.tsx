@@ -3,6 +3,7 @@ import {
   FaHome,
   FaShoppingBag,
   FaHeart,
+  FaStore,
   FaMapMarkerAlt,
   FaCreditCard,
   FaCog,
@@ -16,6 +17,7 @@ import { selectCartCount } from "../../redux/cartSlice";
 const navItems = [
   { to: "/dashboard", icon: FaHome, label: "Dashboard" },
   { to: "/dashboard/orders", icon: FaShoppingBag, label: "My Orders" },
+  { to: "/dashboard/brands", icon: FaStore, label: "Brands" },
   { to: "/dashboard/wishlist", icon: FaHeart, label: "Wishlist" },
   { to: "/cart", icon: FaShoppingCart, label: "Cart", showBadge: true },
   { to: "/dashboard/addresses", icon: FaMapMarkerAlt, label: "Addresses" },

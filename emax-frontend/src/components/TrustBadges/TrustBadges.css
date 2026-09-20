@@ -1,0 +1,58 @@
+/* ==================================================
+   Trust Badges — soft-pastel product footer pills
+   ================================================== */
+
+.trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.trust-badge__icon {
+  font-size: 12px;
+}
+
+/* Local Dispatch — green */
+.trust-badge--dispatch {
+  color: #15803d;
+  background: #e7f6ec;
+  border: 1px solid #b7e4c8;
+}
+
+/* E-maxCertified — blue */
+.trust-badge--certified {
+  color: #1d4ed8;
+  background: #e8f0fe;
+  border: 1px solid #c2d6fb;
+}
+
+/* Brand Official — purple checkmark */
+.trust-badge--official {
+  color: #6d28d9;
+  background: #f1eafb;
+  border: 1px solid #dccbf7;
+}
+
+/* Compact variant (single-line) */
+.trust-badges--compact {
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.trust-badges--compact .trust-badge {
+  padding: 4px 9px;
+  font-size: 11px;
+}

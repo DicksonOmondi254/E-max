@@ -42,11 +42,6 @@ const getUserId = (): number | undefined => {
   return undefined;
 };
 
-const save = (items: CartItem[]) => {
-  const userId = getUserId();
-  cartService.saveCart(items, userId);
-};
-
 const cartSlice = createSlice({
   name: "cart",
 
@@ -55,7 +50,10 @@ const cartSlice = createSlice({
   reducers: {
     restoreCart(state, action: PayloadAction<number | undefined>) {
       const userId = action.payload ?? getUserId();
-      state.items = cartService.loadCart(userId);
+      // Fallback: load from manual storage if persisted state is empty
+      if (state.items.length === 0) {
+        state.items = cartService.loadCart(userId);
+      }
     },
 
     addToCart(
@@ -74,7 +72,9 @@ const cartSlice = createSlice({
         state.items.push(action.payload);
       }
 
-      save(state.items);
+      // Also sync to manual storage for guest→user migration support
+      const userId = getUserId();
+      cartService.saveCart(state.items, userId);
     },
 
     removeFromCart(
@@ -85,7 +85,8 @@ const cartSlice = createSlice({
         (item) => item.id !== action.payload
       );
 
-      save(state.items);
+      const userId = getUserId();
+      cartService.saveCart(state.items, userId);
     },
 
     increaseQuantity(
@@ -99,8 +100,6 @@ const cartSlice = createSlice({
       if (item) {
         item.quantity++;
       }
-
-      save(state.items);
     },
 
     decreaseQuantity(
@@ -120,8 +119,6 @@ const cartSlice = createSlice({
           (i) => i.id !== action.payload
         );
       }
-
-      save(state.items);
     },
 
     updateQuantity(
@@ -141,8 +138,6 @@ const cartSlice = createSlice({
           action.payload.quantity
         );
       }
-
-      save(state.items);
     },
 
     applyDiscount(
@@ -164,7 +159,21 @@ const cartSlice = createSlice({
       state.discount = 0;
       state.shipping = 0;
 
-      cartService.clearCart();
+      const userId = getUserId();
+      cartService.clearCart(userId);
+    },
+
+    /**
+     * Migrate guest cart to user-specific key after login
+     */
+    migrateGuestCart(state) {
+      const userId = getUserId();
+      if (userId) {
+        const guestItems = cartService.migrateGuestCartToUser(userId);
+        if (guestItems.length > 0 && state.items.length === 0) {
+          state.items = guestItems;
+        }
+      }
     },
   },
 });
@@ -179,6 +188,7 @@ export const {
   applyDiscount,
   setShipping,
   clearCart,
+  migrateGuestCart,
 } = cartSlice.actions;
 
 /* ==========================================
@@ -227,3 +237,4 @@ export const selectCartTotal = createSelector(
 );
 
 export default cartSlice.reducer;
+

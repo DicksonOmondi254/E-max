@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import DashboardSidebar from "../../components/Dashboard/DashboardSidebar";
 import DashboardHeader from "../../components/Dashboard/DashboardHeader";
 
+// Shared styles used by all customer dashboard sub-pages.
+// Importing here guarantees the CSS loads even on a hard refresh of any /dashboard/* route
+// (e.g. /dashboard/orders, /dashboard/wishlist) without needing to visit /dashboard first.
+import "../../components/Dashboard/Dashboard.css";
+
 const CustomerShell = ({
   title,
   children,

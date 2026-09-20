@@ -1,20 +1,27 @@
-# Admin-to-User Notification System - Implementation Progress
+# Trust Badges Feature — Implementation Plan
 
-## Backend Steps
-- [x] Step 1: Add Notification & UserNotification models to Prisma schema
-- [x] Step 2: Generate Prisma client and sync database (`npx prisma generate` + `npx prisma db push`)
-- [x] Step 3: Create notification service (notificationService.ts)
-- [x] Step 4: Create notification controller (notificationController.ts)
-- [x] Step 5: Create notification routes (notificationRoutes.ts)
-- [x] Step 6: Register notification routes in app.ts
+## Goal
+Allow admin and seller to edit/change the Trustbadge shown on a product, based on the
+certification badges assigned to the shop (seller) that owns the product.
 
-## Frontend Steps
-- [ ] Step 7: Create frontend notification service (notificationService.ts)
-- [ ] Step 8: Create admin Notifications page (ManageNotifications.tsx)
-- [ ] Step 9: Update NotificationBell component with dropdown and real data
-- [ ] Step 10: Create NotificationsList component for dropdown
-- [ ] Step 11: Add "Notifications" nav link to Admin Sidebar
-- [ ] Step 12: Add admin notifications route in App.tsx
-- [ ] Step 13: Add CSS styles for notifications
-- [ ] Step 14: Integrate notifications into customer dashboard
+## Backend (already implemented)
+- [x] Prisma `User.trustBadges` field + migration
+- [x] `sellerDashboardService`: parse/write `trustBadges` JSON in get/update profile
+- [x] `sellerManagementService`: include `trustBadges` in seller list + `updateSellerTrustBadges()`
+- [x] `sellerManagementController`: `updateSellerTrustBadgesController`
+- [x] `sellerManagementRoutes`: `PATCH /:id/trust-badges`
+- [x] `productService`: include `user: { select: { trustBadges } }` for product listings/details
 
+## Frontend
+### Already implemented
+- [x] `types/product.ts`: `user?.trustBadges`
+- [x] `TrustBadges/TrustBadges.tsx`: dynamic `badges` prop rendering
+- [x] `ProductCard/ProductCard.tsx`: pass `product.user.trustBadges` to `<TrustBadges>`
+- [x] `sellerService.ts`: `trustBadges: string[]` on profile + `updateProfile` param
+- [x] `adminService.ts`: `updateSellerTrustBadges()` method
+- [x] Seller Settings UI — Trust Badges section with toggle buttons (Settings.tsx)
+
+### Remaining
+- [ ] Admin Sellers UI — "Manage Trust Badges" action + modal (Sellers.tsx)
+- [ ] ProductDetails page — render `<TrustBadges>` from `product.user.trustBadges`
+- [ ] Build & verify (frontend)

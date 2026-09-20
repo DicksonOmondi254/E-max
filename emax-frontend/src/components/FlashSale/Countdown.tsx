@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./FlashSale.css";
 
 const Countdown = () => {
   const target = new Date().getTime() + 1000 * 60 * 60 * 8;

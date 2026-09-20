@@ -10,6 +10,84 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+export const sendSellerDeactivationEmail = async (
+  email: string,
+  sellerName: string,
+  shopName: string
+) => {
+  const mailOptions = {
+    from: `"${process.env.FROM_NAME || "E-Max Store"}" <${process.env.FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: email,
+    subject: "Important: Your Seller Account Has Been Deactivated - E-Max",
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
+      <body style="margin:0;padding:0;background-color:#f4f4f4;font-family:Arial,Helvetica,sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;padding:20px 0;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+                <!-- Header -->
+                <tr>
+                  <td style="background:linear-gradient(135deg,#dc2626,#ef4444);padding:40px 32px;text-align:center;">
+                    <h1 style="color:#ffffff;margin:0;font-size:28px;font-weight:700;">E-Max Store</h1>
+                    <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:15px;">Account Deactivation Notice</p>
+                  </td>
+                </tr>
+                <!-- Body -->
+                <tr>
+                  <td style="padding:40px 32px;">
+                    <h2 style="color:#1e293b;font-size:20px;margin:0 0 16px;">Hello ${sellerName},</h2>
+                    <p style="color:#475569;font-size:15px;line-height:1.7;margin:0 0 16px;">
+                      We regret to inform you that your seller account for <strong>${shopName}</strong> has been <strong style="color:#dc2626;">deactivated</strong> by an E-Max administrator.
+                    </p>
+                    <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin:0 0 20px;">
+                      <p style="color:#991b1b;font-size:14px;line-height:1.6;margin:0;">
+                        <strong>What this means:</strong> Your products are no longer visible to customers. You cannot process new orders or access seller features until your account is reactivated.
+                      </p>
+                    </div>
+                    <p style="color:#475569;font-size:14px;line-height:1.6;margin:0 0 8px;">
+                      If you believe this was done in error or would like more information, please contact our support team.
+                    </p>
+                    <!-- Support Info -->
+                    <table cellpadding="0" cellspacing="0" style="margin:24px 0 0;width:100%;">
+                      <tr>
+                        <td style="background:#f8fafc;border-radius:8px;padding:16px;border:1px solid #e2e8f0;">
+                          <p style="color:#475569;font-size:13px;margin:0 0 4px;"><strong>Support Email:</strong> ${process.env.SUPPORT_EMAIL || "support@emaxstore.com"}</p>
+                          <p style="color:#475569;font-size:13px;margin:0 0 4px;"><strong>Support Hours:</strong> Mon-Fri, 8:00 AM - 6:00 PM EAT</p>
+                          <p style="color:#475569;font-size:13px;margin:0;">You can also reach out via your seller dashboard to contact support.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <!-- Footer -->
+                <tr>
+                  <td style="padding:24px 32px;background-color:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;">
+                    <p style="color:#94a3b8;font-size:12px;margin:0 0 4px;">
+                      &copy; ${new Date().getFullYear()} E-Max Store. All rights reserved.
+                    </p>
+                    <p style="color:#94a3b8;font-size:12px;margin:0;">
+                      This is an automated message. Please do not reply to this email.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 export const sendPasswordResetEmail = async (
   email: string,
   resetToken: string

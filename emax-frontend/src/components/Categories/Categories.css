@@ -1,51 +1,154 @@
-.categories{
+/* ================================================
+   Categories — Kilimall Style Circular Icons
+   ================================================ */
 
-padding:60px;
-
+.cat-section {
+  padding: 32px 0 24px;
+  background: #fff;
 }
 
-.categories h2{
-
-font-size:35px;
-
-margin-bottom:40px;
-
+.cat-section .page-wrapper {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
-.category-grid{
-
-display:grid;
-
-grid-template-columns:repeat(4,1fr);
-
-gap:20px;
-
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px 12px;
 }
 
-.category-card{
-
-padding:40px;
-
-background:white;
-
-border-radius:15px;
-
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-
-text-align:center;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.3s;
-
+.cat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  padding: 12px 8px;
+  border-radius: 12px;
+  transition: background 0.2s;
+  cursor: pointer;
 }
 
-.category-card:hover{
-
-background:#0057ff;
-
-color:white;
-
+.cat-item:hover {
+  background: #f8f9fa;
 }
+
+.cat-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #f0f2f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cat-item:hover .cat-icon-wrap {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cat-icon {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.cat-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a2e;
+  text-align: center;
+  line-height: 1.3;
+  margin-bottom: 2px;
+}
+
+.cat-count {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* Sub-category chips */
+.cat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.cat-chip {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #e63946;
+  background: #fff1f0;
+  border: 1px solid #ffe0de;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+}
+
+.cat-item:hover .cat-chip {
+  background: #e63946;
+  color: #fff;
+}
+
+/* Skeleton */
+.cat-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+}
+
+.cat-skeleton__circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: cat-shimmer 1.5s infinite;
+  margin-bottom: 10px;
+}
+
+.cat-skeleton__label {
+  width: 80px;
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: cat-shimmer 1.5s infinite;
+}
+
+@keyframes cat-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (max-width: 768px) {
+  .cat-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .cat-icon-wrap {
+    width: 60px;
+    height: 60px;
+  }
+  .cat-icon {
+    font-size: 24px;
+  }
+  .cat-name {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cat-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+

@@ -177,7 +177,7 @@ export const createProduct = async (
       ? req.file.filename
       : "";
 
-    const product =
+const product =
       await productService.createProduct({
         name: req.body.name,
         slug: req.body.slug,
@@ -192,6 +192,8 @@ export const createProduct = async (
           req.body.featured === "true",
 
         thumbnail,
+
+        userId: req.user!.id,
 
         categoryId: Number(
           req.body.categoryId
@@ -235,6 +237,18 @@ export const updateProduct = async (
       return res.status(404).json({
         success: false,
         message: "Product not found.",
+      });
+    }
+
+    // Ownership check: SELLERs can only update their own products
+    if (
+      req.user!.role === "SELLER" &&
+      existing.userId !== req.user!.id
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Access denied. You can only update your own products.",
       });
     }
 
@@ -327,6 +341,18 @@ export const deleteProduct = async (
       });
     }
 
+    // Ownership check: SELLERs can only delete their own products
+    if (
+      req.user!.role === "SELLER" &&
+      existing.userId !== req.user!.id
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Access denied. You can only delete your own products.",
+      });
+    }
+
     await productService.deleteProduct(id);
 
     if (existing.thumbnail) {
@@ -355,6 +381,35 @@ export const deleteProduct = async (
     });
   }
 };
+/* =====================================================
+   GET DEALS (DISCOUNTED PRODUCTS)
+===================================================== */
+
+export const getDeals = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const products =
+      await productService.getDeals();
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: products,
+    });
+  } catch (error: any) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Failed to fetch deals.",
+    });
+  }
+};
+
 /* =====================================================
    GET PRODUCT BY SLUG
 ===================================================== */

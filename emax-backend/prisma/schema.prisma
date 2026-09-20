@@ -38,27 +38,48 @@ model User {
   password   String
   role       Role    @default(CUSTOMER)
   isVerified Boolean @default(false)
+  isActive   Boolean @default(true)
+shopName   String?
+  location   String?
+  shopLogo   String?
+  shopBanner String?
+  shopDescription String?
+  trustBadges String @default("[]")
+
+  // Business location details
+  addressLine1  String?
+  addressLine2  String?
+  city          String?
+  state         String?
+  country       String?
+  postalCode    String?
+
+  // Deactivation tracking
+  deactivatedReason String?
 
   resetToken       String?
   resetTokenExpiry DateTime?
 
   // User preferences
-  notificationPrefs String  @default("{\"orderUpdates\":true,\"promotions\":true,\"newsletter\":false,\"paymentAlerts\":true,\"wishlistAlerts\":false}")
-  language          String  @default("en")
-  currency          String  @default("KES")
-  timezone          String  @default("Africa/Nairobi")
+  notificationPrefs String @default("{\"orderUpdates\":true,\"promotions\":true,\"newsletter\":false,\"paymentAlerts\":true,\"wishlistAlerts\":false}")
+  language          String @default("en")
+  currency          String @default("KES")
+  timezone          String @default("Africa/Nairobi")
 
-  reviews  ProductReview[]
-  orders   Order[]
-  cart     Cart?
-  wishlist Wishlist?
-  addresses CustomerAddress[]
-  notifications UserNotification[]
-  createdNotifications Notification[] @relation("CreatedNotifications")
-  coupons UserCoupon[]
+  products             Product[]
+  reviews              ProductReview[]
+  orders               Order[]
+  cart                 Cart?
+  wishlist             Wishlist?
+  addresses            CustomerAddress[]
+  notifications        UserNotification[]
+  createdNotifications Notification[]     @relation("CreatedNotifications")
+  coupons              UserCoupon[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  FlashSale    FlashSale[]
+  BulkDiscount BulkDiscount[]
 }
 
 model Category {
@@ -97,9 +118,14 @@ model Product {
 
   thumbnail String
 
+  discount Int @default(0)
+
   featured Boolean @default(false)
 
   active Boolean @default(true)
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
@@ -107,14 +133,16 @@ model Product {
   brandId Int
   brand   Brand @relation(fields: [brandId], references: [id])
 
-  images     ProductImage[]
-  reviews    ProductReview[]
-  orderItems OrderItem[]
- cartItems CartItem[]
-wishlistItems WishlistItem[]
+  images        ProductImage[]
+  reviews       ProductReview[]
+  orderItems    OrderItem[]
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  FlashSaleProduct    FlashSaleProduct[]
+  BulkDiscountProduct BulkDiscountProduct[]
 }
 
 model ProductImage {
@@ -161,7 +189,6 @@ model Order {
   user User @relation(fields: [userId], references: [id])
 
   items OrderItem[]
-  
 
   createdAt DateTime @default(now())
 
@@ -215,6 +242,7 @@ model CartItem {
 
   createdAt DateTime @default(now())
 }
+
 model Wishlist {
   id Int @id @default(autoincrement())
 
@@ -256,14 +284,14 @@ enum ZoneStatus {
 }
 
 model ShippingZone {
-  id             Int        @id @default(autoincrement())
-  name           String
-  regions        String
-  fee            Float
-  estimatedDays  String
-  zoneType       ZoneType   @default(LOCAL)
-  status         ZoneStatus @default(ACTIVE)
-  freeThreshold  Float      @default(0)
+  id            Int        @id @default(autoincrement())
+  name          String
+  regions       String
+  fee           Float
+  estimatedDays String
+  zoneType      ZoneType   @default(LOCAL)
+  status        ZoneStatus @default(ACTIVE)
+  freeThreshold Float      @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -279,8 +307,8 @@ model ShippingSettings {
 }
 
 model CustomerAddress {
-  id        Int      @id @default(autoincrement())
-  label     String   @default("Home")
+  id        Int     @id @default(autoincrement())
+  label     String  @default("Home")
   firstName String
   lastName  String
   phone     String
@@ -288,7 +316,7 @@ model CustomerAddress {
   town      String
   address   String
   landmark  String?
-  isDefault Boolean  @default(false)
+  isDefault Boolean @default(false)
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -323,7 +351,7 @@ model Coupon {
 }
 
 model UserCoupon {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   userId   Int
   couponId Int
   usedAt   DateTime @default(now())
@@ -351,13 +379,13 @@ enum NotificationTarget {
 }
 
 model Notification {
-  id          Int               @id @default(autoincrement())
+  id          Int                @id @default(autoincrement())
   title       String
   message     String
-  type        NotificationType  @default(INFO)
+  type        NotificationType   @default(INFO)
   target      NotificationTarget @default(ALL)
   createdById Int
-  createdBy   User              @relation("CreatedNotifications", fields: [createdById], references: [id])
+  createdBy   User               @relation("CreatedNotifications", fields: [createdById], references: [id])
 
   users UserNotification[]
 
@@ -366,10 +394,10 @@ model Notification {
 }
 
 model UserNotification {
-  id             Int          @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   userId         Int
   notificationId Int
-  isRead         Boolean      @default(false)
+  isRead         Boolean   @default(false)
   readAt         DateTime?
 
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -379,60 +407,163 @@ model UserNotification {
   @@map("user_notifications")
 }
 
+enum FlashSaleStatus {
+  SCHEDULED
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+model FlashSale {
+  id                 Int             @id @default(autoincrement())
+  title              String
+  description        String?
+  discountPercentage Float
+  startDate          DateTime
+  endDate            DateTime
+  status             FlashSaleStatus @default(SCHEDULED)
+  isActive           Boolean         @default(true)
+
+  sellerId Int
+  seller   User @relation(fields: [sellerId], references: [id])
+
+  products FlashSaleProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("flash_sales")
+}
+
+model FlashSaleProduct {
+  id            Int    @id @default(autoincrement())
+  discountPrice Float?
+
+  flashSaleId Int
+  flashSale   FlashSale @relation(fields: [flashSaleId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([flashSaleId, productId])
+  @@map("flash_sale_products")
+}
+
+enum BulkDiscountStatus {
+  SCHEDULED
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+model BulkDiscount {
+  id          Int                @id @default(autoincrement())
+  name        String
+  description String?
+  startDate   DateTime
+  endDate     DateTime
+  status      BulkDiscountStatus @default(SCHEDULED)
+  isActive    Boolean            @default(true)
+
+  sellerId Int
+  seller   User @relation(fields: [sellerId], references: [id])
+
+  tiers    BulkDiscountTier[]
+  products BulkDiscountProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bulk_discounts")
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FLAT
+}
+
+model BulkDiscountTier {
+  id            Int          @id @default(autoincrement())
+  minQuantity   Int
+  maxQuantity   Int
+  discountType  DiscountType
+  discountValue Float
+
+  bulkDiscountId Int
+  bulkDiscount   BulkDiscount @relation(fields: [bulkDiscountId], references: [id], onDelete: Cascade)
+
+  @@map("bulk_discount_tiers")
+}
+
+model BulkDiscountProduct {
+  id Int @id @default(autoincrement())
+
+  bulkDiscountId Int
+  bulkDiscount   BulkDiscount @relation(fields: [bulkDiscountId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([bulkDiscountId, productId])
+  @@map("bulk_discount_products")
+}
+
 model StoreSettings {
-  id              Int    @id @default(autoincrement())
-  
+  id Int @id @default(autoincrement())
+
   // General
-  storeName       String @default("E-Max Store")
-  tagline         String @default("Your Premium Shopping Destination")
-  supportEmail    String @default("support@emaxstore.com")
-  supportPhone    String @default("+254 700 123 456")
-  address         String @default("123 Kenyatta Avenue, Nairobi, Kenya")
-  currency        String @default("KES")
-  timezone        String @default("Africa/Nairobi")
+  storeName    String @default("E-Max Store")
+  tagline      String @default("Your Premium Shopping Destination")
+  supportEmail String @default("support@emaxstore.com")
+  supportPhone String @default("+254 700 123 456")
+  address      String @default("123 Kenyatta Avenue, Nairobi, Kenya")
+  currency     String @default("KES")
+  timezone     String @default("Africa/Nairobi")
 
   // Appearance
-  logo            String @default("")
-  favicon         String @default("")
-  primaryColor    String @default("#6366f1")
-  secondaryColor  String @default("#8b5cf6")
-  accentColor     String @default("#f59e0b")
-  backgroundColor String @default("#f5f6fa")
+  logo            String  @default("")
+  favicon         String  @default("")
+  primaryColor    String  @default("#6366f1")
+  secondaryColor  String  @default("#8b5cf6")
+  accentColor     String  @default("#f59e0b")
+  backgroundColor String  @default("#f5f6fa")
   darkMode        Boolean @default(false)
 
   // Social Media
-  facebookUrl     String @default("")
-  twitterUrl      String @default("")
-  instagramUrl    String @default("")
-  tiktokUrl       String @default("")
-  youtubeUrl      String @default("")
-  linkedinUrl     String @default("")
+  facebookUrl  String @default("")
+  twitterUrl   String @default("")
+  instagramUrl String @default("")
+  tiktokUrl    String @default("")
+  youtubeUrl   String @default("")
+  linkedinUrl  String @default("")
 
   // Custom Code
-  customCss       String @default("")
-  customJs        String @default("")
-  customHeader    String @default("")
-  customFooter    String @default("")
+  customCss    String @default("")
+  customJs     String @default("")
+  customHeader String @default("")
+  customFooter String @default("")
 
   // Email SMTP
-  smtpHost        String @default("")
-  smtpPort        Int    @default(587)
-  smtpUser        String @default("")
-  smtpPass        String @default("")
-  smtpFromEmail   String @default("")
-  smtpFromName    String @default("")
+  smtpHost      String @default("")
+  smtpPort      Int    @default(587)
+  smtpUser      String @default("")
+  smtpPass      String @default("")
+  smtpFromEmail String @default("")
+  smtpFromName  String @default("")
 
   // Payment - stored as JSON string
-  paymentMethods  String @default("[]")
+  paymentMethods String @default("[]")
 
   // Notifications - stored as JSON string
-  notifications   String @default("[]")
+  notifications String @default("[]")
 
   // SEO
-  metaTitle        String @default("E-Max Store - Premium Shopping")
-  metaDescription  String @default("Discover the best deals on electronics, fashion, home goods at E-Max Store.")
-  googleAnalyticsId String @default("")
-  maintenanceMode  Boolean @default(false)
+  metaTitle         String  @default("E-Max Store - Premium Shopping")
+  metaDescription   String  @default("Discover the best deals on electronics, fashion, home goods at E-Max Store.")
+  googleAnalyticsId String  @default("")
+  maintenanceMode   Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

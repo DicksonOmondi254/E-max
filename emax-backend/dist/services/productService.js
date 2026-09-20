@@ -83,6 +83,11 @@ exports.productService = {
                     brand: true,
                     images: true,
                     reviews: true,
+                    user: {
+                        select: {
+                            trustBadges: true,
+                        },
+                    },
                 },
                 skip,
                 take: limit,
@@ -116,6 +121,11 @@ exports.productService = {
                         },
                     },
                 },
+                user: {
+                    select: {
+                        trustBadges: true,
+                    },
+                },
             },
             orderBy: {
                 createdAt: "desc",
@@ -134,6 +144,11 @@ exports.productService = {
                 category: true,
                 brand: true,
                 images: true,
+                user: {
+                    select: {
+                        trustBadges: true,
+                    },
+                },
             },
             orderBy: {
                 createdAt: "desc",
@@ -160,6 +175,11 @@ exports.productService = {
                         },
                     },
                 },
+                user: {
+                    select: {
+                        trustBadges: true,
+                    },
+                },
             },
         });
     },
@@ -181,6 +201,11 @@ exports.productService = {
                                 lastName: true,
                             },
                         },
+                    },
+                },
+                user: {
+                    select: {
+                        trustBadges: true,
                     },
                 },
             },
@@ -227,6 +252,11 @@ exports.productService = {
                 thumbnail: data.thumbnail,
                 featured: data.featured,
                 active: data.active ?? true,
+                user: {
+                    connect: {
+                        id: data.userId,
+                    },
+                },
                 category: {
                     connect: {
                         id: data.categoryId,
@@ -338,6 +368,25 @@ exports.productService = {
             where: { id },
             data: {
                 active: !product.active,
+            },
+        });
+    },
+    /* ==========================================
+       GET DEALS (DISCOUNTED PRODUCTS)
+    ========================================== */
+    async getDeals() {
+        return prisma_1.prisma.product.findMany({
+            where: {
+                discount: { gt: 0 },
+                active: true,
+            },
+            include: {
+                category: true,
+                brand: true,
+                images: true,
+            },
+            orderBy: {
+                discount: "desc",
             },
         });
     },

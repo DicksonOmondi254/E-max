@@ -23,12 +23,9 @@ interface AuthState {
   loading: boolean;
 }
 
-// Restore authentication after page refresh
-const storedUser = localStorage.getItem("user");
-
 const initialState: AuthState = {
-  user: storedUser ? JSON.parse(storedUser) : null,
-  isAuthenticated: !!storedUser,
+  user: null,
+  isAuthenticated: false,
   loading: false,
 };
 
@@ -47,41 +44,31 @@ const authSlice = createSlice({
       action: PayloadAction<User>
     ) => {
       state.loading = false;
-
       state.user = action.payload;
-
       state.isAuthenticated = true;
 
-      // Persist login
-      localStorage.setItem(
-        "user",
-        JSON.stringify(action.payload)
-      );
-
-      localStorage.setItem(
-        "token",
-        action.payload.token
-      );
+      // Also sync token to localStorage for axios interceptor
+      localStorage.setItem("token", action.payload.token);
     },
 
     logout: (state) => {
       // Save cart to user-specific key before clearing
       const userId = state.user?.id;
       if (userId) {
-        // Cart data is already saved per-user by cartSlice's save()
-        // Clear the user's cart localStorage
         cartService.clearCart(userId);
       }
 
       state.user = null;
-
       state.isAuthenticated = false;
-
       state.loading = false;
 
-      // Clear storage
-      localStorage.removeItem("user");
+      // Clear token from localStorage
       localStorage.removeItem("token");
+    },
+
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
     },
   },
 });
@@ -90,6 +77,8 @@ export const {
   loginStart,
   loginSuccess,
   logout,
+  setUser,
 } = authSlice.actions;
 
 export default authSlice.reducer;
+

@@ -7,9 +7,14 @@ import fs from "fs";
 ========================================== */
 
 const productDir = "uploads/products";
+const sellerDir = "uploads/sellers";
 
 if (!fs.existsSync(productDir)) {
   fs.mkdirSync(productDir, { recursive: true });
+}
+
+if (!fs.existsSync(sellerDir)) {
+  fs.mkdirSync(sellerDir, { recursive: true });
 }
 
 /* ==========================================
@@ -19,6 +24,28 @@ if (!fs.existsSync(productDir)) {
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     cb(null, productDir);
+  },
+
+  filename(req, file, cb) {
+    const unique =
+      Date.now() +
+      "-" +
+      Math.round(Math.random() * 1e9);
+
+    cb(
+      null,
+      unique + path.extname(file.originalname)
+    );
+  },
+});
+
+/* ==========================================
+   Seller Image Storage (logo / banner)
+========================================== */
+
+const sellerStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, sellerDir);
   },
 
   filename(req, file, cb) {
@@ -67,6 +94,16 @@ const fileFilter: multer.Options["fileFilter"] = (
 
 export const upload = multer({
   storage,
+
+  fileFilter,
+
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+
+export const uploadSeller = multer({
+  storage: sellerStorage,
 
   fileFilter,
 

@@ -1,15 +1,2 @@
-.hero-container {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 20px;
-  padding: 25px 40px;
-  max-width: 1600px;
-  margin: 0 auto;
-}
+/* Hero is now delegated to HeroSlider — this file kept for import compatibility */
 
-@media (max-width: 992px) {
-  .hero-container {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
-}

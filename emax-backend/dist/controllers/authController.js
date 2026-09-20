@@ -74,6 +74,14 @@ const login = async (req, res) => {
                 message: "Invalid credentials",
             });
         }
+        // Check if seller account is deactivated
+        if (user.role === "SELLER" && !user.isActive) {
+            return res.status(403).json({
+                success: false,
+                message: "Your seller account has been deactivated by the administrator. During this time, you are unable to upload products, manage listings, or provide services. If you believe this is an error or need assistance, please contact the administrator for support.",
+                isDeactivated: true,
+            });
+        }
         const token = (0, jwt_1.generateToken)({
             id: user.id,
             email: user.email,
@@ -83,7 +91,10 @@ const login = async (req, res) => {
         res.json({
             success: true,
             token,
-            user: safeUser,
+            user: {
+                ...safeUser,
+                isActive: user.isActive,
+            },
         });
     }
     catch (error) {
